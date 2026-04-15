@@ -20,9 +20,14 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .sec-title{font-size:11px;font-weight:700;color:#6c6c70;letter-spacing:.04em;padding:8px 10px 4px;text-transform:uppercase}
 .field{padding:6px 10px;border-bottom:.5px solid #e5e5ea;display:flex;align-items:center;gap:8px;min-height:30px}
 .field:last-child{border-bottom:none}
-.field label{font-size:13px;color:#1c1c1e;flex:1;white-space:nowrap}
-.field input[type=number],.field input[type=text]{text-align:right;border:none;outline:none;font-size:14px;color:#1c1c1e;background:transparent;width:104px;padding:0;min-height:20px}
+.field label{font-size:13px;color:#1c1c1e;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.field input[type=number],.field input[type=text]{text-align:right;border:none;outline:none;font-size:14px;color:#1c1c1e;background:transparent;width:118px;max-width:55%;padding:0;min-height:20px;flex:0 0 auto}
 .field input::placeholder{color:#c7c7cc}
+.field-value{font-size:14px;color:#6c6c70;min-width:66px;text-align:right;flex:0 0 auto}
+.top-card.sales .field input[type=number]{width:112px;max-width:none}
+.top-card.visitor .field input[type=number]{width:46px;max-width:46px}
+.top-card.visitor .field label{font-size:12px}
+.top-card.sales .field label,.top-card.register .field label{font-size:12px}
 
 .section{background:#fff;border-radius:12px;margin:0 12px 10px;overflow:hidden}
 .prop-block{padding:10px 12px;border-bottom:.5px solid #e5e5ea}
@@ -43,6 +48,10 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .add-btn,.gen-btn,.copy-btn{width:100%;border-radius:12px;cursor:pointer;display:block}
 .add-btn{padding:12px;font-size:15px;min-height:46px;border:1.5px dashed #007aff;background:#fff;color:#007aff}
 .gen-btn{margin-top:8px;padding:13px;font-size:16px;min-height:48px;font-weight:700;background:#007aff;color:#fff;border:none}
+.gen-btn:disabled{opacity:.92}
+.gen-btn.loading{display:flex;align-items:center;justify-content:center;gap:8px}
+.spin-arrow{display:inline-block;font-size:18px;line-height:1;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 .report-head{display:flex;align-items:center;gap:8px;padding:10px 12px 4px}
 .back-btn{display:inline-flex;align-items:center;gap:6px;border:none;background:none;color:#007aff;font-size:17px;font-weight:600;cursor:pointer;padding:4px 0}
@@ -66,6 +75,7 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
   .field{border-bottom-color:#38383a}
   .field label,.prop-name{color:#fff}
   .field input[type=number],.field input[type=text],.prop-name,.num-field input{color:#fff}
+  .field-value{color:#ebebf5}
   .num-field{background:#2c2c2e}
   .tag{background:#2c2c2e;border-color:#48484a;color:#8e8e93}
   .prop-block{border-bottom-color:#38383a}
@@ -94,7 +104,7 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
         </div>
       </div>
 
-      <div class="top-card">
+      <div class="top-card sales">
         <div class="sec-title">賃貸 — 売上・実績</div>
         <div class="field"><label>売上目標（円）</label><input type="number" id="target" placeholder="500000" inputmode="numeric"></div>
         <div class="field"><label>当月実績（円）</label><input type="number" id="actual" placeholder="85000" inputmode="numeric"></div>
@@ -103,7 +113,7 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
         <div class="field"><label>内AD件数</label><input type="number" id="ad" placeholder="0" inputmode="numeric"></div>
       </div>
 
-      <div class="top-card">
+      <div class="top-card visitor">
         <div class="sec-title">来店客数（当日）</div>
         <div class="field"><label>予約</label><input type="number" id="v1" placeholder="0" inputmode="numeric"></div>
         <div class="field"><label>飛込</label><input type="number" id="v2" placeholder="0" inputmode="numeric"></div>
@@ -111,11 +121,11 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
         <div class="field"><label>その他</label><input type="number" id="v4" placeholder="0" inputmode="numeric"></div>
       </div>
 
-      <div class="top-card">
+      <div class="top-card register">
         <div class="sec-title">物件登録件数</div>
-        <div class="field"><label>at home 目標</label><input type="number" id="ah1" placeholder="40" inputmode="numeric"></div>
+        <div class="field"><label>at home 目標</label><span class="field-value">40件</span></div>
         <div class="field"><label>at home 実績</label><input type="number" id="ah2" placeholder="39" inputmode="numeric"></div>
-        <div class="field"><label>SUUMO 目標</label><input type="number" id="su1" placeholder="10" inputmode="numeric"></div>
+        <div class="field"><label>SUUMO 目標</label><span class="field-value">10件</span></div>
         <div class="field"><label>SUUMO 実績</label><input type="number" id="su2" placeholder="10" inputmode="numeric"></div>
         <div class="field"><label>ホームページ</label><input type="number" id="hp" placeholder="44" inputmode="numeric"></div>
       </div>
@@ -137,7 +147,7 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 
   <div class="action-bar">
     <button type="button" class="add-btn" onclick="addProp()">＋ 物件を追加</button>
-    <button type="button" class="gen-btn" onclick="generate()">日報を生成する</button>
+    <button type="button" class="gen-btn" id="generateBtn" onclick="handleGenerate()">日報を生成する</button>
   </div>
 </div>
 
@@ -153,7 +163,35 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 
 <script>
 let pid=0;
-const statusLabels=['通常','賃料査定中','掲載準備中','ネット掲載準備中'];
+let isGenerating=false;
+const statusLabels=['通常','賃料査定中','ネット掲載準備中'];
+const storageKey='daily_report_last_values_v1';
+const fixedTargets={atHome:'40',suumo:'10'};
+const fieldDefaults={
+  staff:'工藤',
+  target:'500000',
+  actual:'85000',
+  forecast:'505455',
+  contracts:'0',
+  ad:'0',
+  v1:'0',
+  v2:'0',
+  v3:'0',
+  v4:'0',
+  ah2:'39',
+  su2:'10',
+  hp:'44',
+  r1:'6',
+  r2:'0',
+  r3:'3',
+  r4:'0'
+};
+const persistedFieldIds=[
+  'staff','target','actual','forecast','contracts','ad',
+  'v1','v2','v3','v4',
+  'ah2','su2','hp',
+  'r1','r2','r3','r4'
+];
 const initProps=[
   ['La Stage West 中野 401','通常',8,0],
   ['ファランドール 103','通常',4,0],
@@ -221,6 +259,54 @@ function getStatus(id){
   return on?on.textContent:'通常';
 }
 
+function loadLastSnapshot(){
+  try{
+    const raw=localStorage.getItem(storageKey);
+    if(!raw)return null;
+    const data=JSON.parse(raw);
+    return data&&typeof data==='object'?data:null;
+  }catch(_e){
+    return null;
+  }
+}
+
+function applyInitialFieldValues(snapshot){
+  persistedFieldIds.forEach(id=>{
+    const el=getEl(id);
+    if(!el)return;
+    const hasSaved=snapshot&&snapshot.fields&&snapshot.fields[id]!==undefined&&snapshot.fields[id]!==null;
+    const saved=hasSaved?String(snapshot.fields[id]):'';
+    const hasDefault=fieldDefaults[id]!==undefined&&fieldDefaults[id]!==null;
+    const initial=saved!==''?saved:(hasDefault?String(fieldDefaults[id]):'');
+    el.value=initial;
+  });
+}
+
+function getPropsSnapshot(){
+  const props=[];
+  getEl('propList').querySelectorAll('.prop-block').forEach(block=>{
+    const i=block.id.replace('pb','');
+    props.push({
+      name:getVal('pn'+i,false),
+      status:getStatus(i),
+      h:gv('ph'+i),
+      s:gv('ps'+i)
+    });
+  });
+  return props;
+}
+
+function saveLastSnapshot(){
+  try{
+    const fields={};
+    persistedFieldIds.forEach(id=>{
+      fields[id]=getVal(id,false);
+    });
+    const data={fields,props:getPropsSnapshot()};
+    localStorage.setItem(storageKey,JSON.stringify(data));
+  }catch(_e){}
+}
+
 function showReport(){
   getEl('editorScreen').classList.remove('active');
   getEl('reportScreen').classList.add('active');
@@ -231,6 +317,34 @@ function goBackToEditor(){
   getEl('reportScreen').classList.remove('active');
   getEl('editorScreen').classList.add('active');
   window.scrollTo(0,0);
+}
+
+function setGenerateLoading(isLoading){
+  const btn=getEl('generateBtn');
+  if(!btn)return;
+  if(isLoading){
+    btn.disabled=true;
+    btn.classList.add('loading');
+    btn.innerHTML='<span class="spin-arrow" aria-hidden="true">↻</span><span>生成中...</span>';
+    return;
+  }
+  btn.disabled=false;
+  btn.classList.remove('loading');
+  btn.textContent='日報を生成する';
+}
+
+function handleGenerate(){
+  if(isGenerating)return;
+  isGenerating=true;
+  setGenerateLoading(true);
+  setTimeout(()=>{
+    try{
+      generate();
+    }finally{
+      setGenerateLoading(false);
+      isGenerating=false;
+    }
+  },550);
 }
 
 function generate(){
@@ -258,8 +372,8 @@ function generate(){
   lines.push(`その他　　${gv('v4')}件`);
   lines.push('');
   lines.push('◉物件登録件数');
-  lines.push(`at home ${gv('ah1')}件     ${gv('ah2')}件`);
-  lines.push(`SUUMO  ${gv('su1')}件     ${gv('su2')}件`);
+  lines.push(`at home ${fixedTargets.atHome}件     ${gv('ah2')}件`);
+  lines.push(`SUUMO  ${fixedTargets.suumo}件     ${gv('su2')}件`);
   lines.push(`ホームページ        ${gv('hp')}件`);
   lines.push('');
   lines.push('◉賃貸空室');
@@ -287,6 +401,7 @@ function generate(){
   const btn=getEl('copyBtn');
   btn.textContent='コピーする';
   btn.className='copy-btn';
+  saveLastSnapshot();
   showReport();
 }
 
@@ -321,7 +436,19 @@ function showOk(btn){
   },2500);
 }
 
-initProps.forEach(p=>addProp(p[0],p[1],p[2],p[3]));
+const lastSnapshot=loadLastSnapshot();
+applyInitialFieldValues(lastSnapshot);
+if(lastSnapshot&&Array.isArray(lastSnapshot.props)&&lastSnapshot.props.length){
+  lastSnapshot.props.forEach(p=>{
+    const name=typeof p.name==='string'?p.name:'';
+    const status=statusLabels.includes(p.status)?p.status:'通常';
+    const h=String(p&&p.h!==undefined&&p.h!==null?p.h:'0');
+    const s=String(p&&p.s!==undefined&&p.s!==null?p.s:'0');
+    addProp(name,status,h,s);
+  });
+}else{
+  initProps.forEach(p=>addProp(p[0],p[1],p[2],p[3]));
+}
 syncToday();
 </script>
 </body>
