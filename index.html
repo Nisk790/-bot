@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -6,128 +6,149 @@
 <title>日報作成ツール</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;background:#f2f2f7;color:#1c1c1e;font-size:16px;padding-bottom:calc(182px + env(safe-area-inset-bottom))}
-h1{font-size:22px;font-weight:700;padding:22px 16px 12px;color:#1c1c1e}
-.section{background:#fff;border-radius:12px;margin:0 16px 12px;overflow:hidden}
-.sec-title{font-size:12px;font-weight:600;color:#6c6c70;letter-spacing:0.05em;padding:14px 16px 6px;text-transform:uppercase}
-.field{padding:14px 16px;border-bottom:0.5px solid #e5e5ea;display:flex;align-items:center;gap:12px}
+:root{--safe-bottom:env(safe-area-inset-bottom);--action-h:116px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;background:#f2f2f7;color:#1c1c1e;font-size:16px;padding-bottom:calc(var(--action-h) + var(--safe-bottom))}
+
+.screen{display:none}
+.screen.active{display:block}
+
+h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
+.top-pane{min-height:calc(100svh - var(--action-h) - var(--safe-bottom));display:flex;flex-direction:column;overflow:hidden}
+.top-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 8px;align-content:start}
+.top-card{background:#fff;border-radius:12px;overflow:hidden}
+.top-card.wide{grid-column:1/-1}
+.sec-title{font-size:11px;font-weight:700;color:#6c6c70;letter-spacing:.04em;padding:8px 10px 4px;text-transform:uppercase}
+.field{padding:6px 10px;border-bottom:.5px solid #e5e5ea;display:flex;align-items:center;gap:8px;min-height:30px}
 .field:last-child{border-bottom:none}
-.field label{font-size:16px;font-weight:500;color:#1c1c1e;flex:1;white-space:nowrap}
-.field input[type=number],.field input[type=text]{text-align:right;border:none;outline:none;font-size:16px;color:#1c1c1e;background:transparent;width:140px;padding:0;min-height:24px}
+.field label{font-size:13px;color:#1c1c1e;flex:1;white-space:nowrap}
+.field input[type=number],.field input[type=text]{text-align:right;border:none;outline:none;font-size:14px;color:#1c1c1e;background:transparent;width:104px;padding:0;min-height:20px}
 .field input::placeholder{color:#c7c7cc}
-.field-full{flex-direction:column;align-items:flex-start;gap:6px}
-.field-full input{width:100%;text-align:left;border:0.5px solid #e5e5ea;border-radius:8px;padding:10px 12px;background:#f9f9f9}
-select{border:none;outline:none;font-size:16px;color:#007aff;background:transparent;-webkit-appearance:none;appearance:none;text-align:right;padding-right:4px}
-.prop-block{padding:12px 16px;border-bottom:0.5px solid #e5e5ea}
+
+.section{background:#fff;border-radius:12px;margin:0 12px 10px;overflow:hidden}
+.prop-block{padding:10px 12px;border-bottom:.5px solid #e5e5ea}
 .prop-block:last-child{border-bottom:none}
-.prop-name{width:100%;border:none;outline:none;font-size:16px;font-weight:500;color:#1c1c1e;background:transparent;margin-bottom:10px;padding:0}
+.prop-name{width:100%;border:none;outline:none;font-size:14px;font-weight:500;color:#1c1c1e;background:transparent;margin-bottom:8px}
 .prop-name::placeholder{color:#c7c7cc}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.tag{font-size:13px;padding:6px 12px;border-radius:20px;border:1px solid #c7c7cc;background:#f2f2f7;color:#6c6c70;cursor:pointer}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.tag{font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid #c7c7cc;background:#f2f2f7;color:#6c6c70;cursor:pointer}
 .tag.on{background:#007aff;color:#fff;border-color:#007aff}
 .nums-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.num-field{background:#f2f2f7;border-radius:8px;padding:10px 12px}
+.num-field{background:#f2f2f7;border-radius:8px;padding:8px 10px}
 .num-field label{font-size:11px;color:#6c6c70;display:block;margin-bottom:3px}
-.num-field input{width:100%;border:none;outline:none;font-size:16px;color:#1c1c1e;background:transparent;min-height:24px}
-.del-row{display:flex;justify-content:flex-end;margin-bottom:6px}
-.del-btn{font-size:14px;color:#ff3b30;background:none;border:none;padding:0;cursor:pointer}
-.action-bar{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(242,242,247,0.98),rgba(242,242,247,0.9) 72%,rgba(242,242,247,0));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.add-btn{width:100%;margin:0;padding:12px;font-size:16px;min-height:48px;border:1.5px dashed #007aff;border-radius:12px;background:#fff;color:#007aff;cursor:pointer;display:block}
-.gen-btn{width:100%;margin:8px 0 0;padding:14px;font-size:17px;min-height:50px;font-weight:700;background:#007aff;color:#fff;border:none;border-radius:12px;cursor:pointer;display:block}
-.out-wrap{margin:12px 16px 0;display:none}
-.out-box{background:#fff;border-radius:12px;padding:14px 16px;white-space:pre-wrap;font-size:15px;line-height:1.45;color:#1c1c1e;word-break:normal;overflow-wrap:anywhere;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',monospace}
-.copy-btn{width:100%;margin-top:10px;padding:13px;font-size:16px;min-height:48px;font-weight:600;background:#fff;color:#007aff;border:1px solid #007aff;border-radius:12px;cursor:pointer;display:block}
-.action-bar .copy-btn{margin-top:8px}
-.copy-btn:disabled{opacity:.45;cursor:not-allowed}
+.num-field input{width:100%;border:none;outline:none;font-size:14px;color:#1c1c1e;background:transparent}
+.del-row{display:flex;justify-content:flex-end;margin-bottom:4px}
+.del-btn{font-size:13px;color:#ff3b30;background:none;border:none;padding:0;cursor:pointer}
+
+.action-bar{position:fixed;left:0;right:0;bottom:0;padding:10px 12px calc(10px + var(--safe-bottom));background:linear-gradient(to top,rgba(242,242,247,.98),rgba(242,242,247,.9) 72%,rgba(242,242,247,0));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.add-btn,.gen-btn,.copy-btn{width:100%;border-radius:12px;cursor:pointer;display:block}
+.add-btn{padding:12px;font-size:15px;min-height:46px;border:1.5px dashed #007aff;background:#fff;color:#007aff}
+.gen-btn{margin-top:8px;padding:13px;font-size:16px;min-height:48px;font-weight:700;background:#007aff;color:#fff;border:none}
+
+.report-head{display:flex;align-items:center;gap:8px;padding:10px 12px 4px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;border:none;background:none;color:#007aff;font-size:17px;font-weight:600;cursor:pointer;padding:4px 0}
+.back-btn .arrow{font-size:20px;line-height:1}
+.report-title{font-size:18px;font-weight:700;color:#1c1c1e}
+.out-wrap{margin:8px 12px 20px}
+.out-box{background:#fff;border-radius:12px;padding:14px 14px;white-space:pre-wrap;font-size:14px;line-height:1.45;color:#1c1c1e;word-break:normal;overflow-wrap:anywhere;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',monospace}
+.copy-btn{margin-top:10px;padding:13px;font-size:16px;min-height:48px;font-weight:600;background:#fff;color:#007aff;border:1px solid #007aff}
 .copy-btn.ok{background:#34c759;border-color:#34c759;color:#fff}
-@media(max-width:390px){
-  .field{flex-wrap:wrap;align-items:flex-start}
-  .field label{width:100%}
-  .field input[type=number],.field input[type=text]{width:100%;text-align:left}
+
+@media(max-width:360px){
+  .field{padding:5px 8px}
+  .field label{font-size:12px}
+  .field input[type=number],.field input[type=text]{font-size:13px;width:92px}
 }
 @media(prefers-color-scheme:dark){
   body{background:#000;color:#fff}
-  h1{color:#fff}
-  .action-bar{background:linear-gradient(to top,rgba(0,0,0,0.98),rgba(0,0,0,0.9) 72%,rgba(0,0,0,0))}
-  .section,.out-box,.copy-btn{background:#1c1c1e}
-  .out-box{color:#f2f2f7}
-  .field label,.prop-name{color:#fff}
-  .field input[type=number],.field input[type=text],.prop-name{color:#fff}
+  h1,.report-title{color:#fff}
+  .top-card,.section,.out-box,.copy-btn{background:#1c1c1e}
+  .sec-title,.num-field label{color:#8e8e93}
   .field{border-bottom-color:#38383a}
+  .field label,.prop-name{color:#fff}
+  .field input[type=number],.field input[type=text],.prop-name,.num-field input{color:#fff}
   .num-field{background:#2c2c2e}
-  .num-field input,.num-field label{color:#ebebf5}
-  .num-field label{color:#8e8e93}
   .tag{background:#2c2c2e;border-color:#48484a;color:#8e8e93}
   .prop-block{border-bottom-color:#38383a}
-  .field-full input{background:#2c2c2e;border-color:#48484a;color:#fff}
-  select{color:#0a84ff}
+  .action-bar{background:linear-gradient(to top,rgba(0,0,0,.98),rgba(0,0,0,.9) 72%,rgba(0,0,0,0))}
   .add-btn{background:#1c1c1e;color:#0a84ff;border-color:#0a84ff}
   .gen-btn{background:#0a84ff}
-  .copy-btn{color:#0a84ff;border-color:#0a84ff}
+  .back-btn,.copy-btn{color:#0a84ff;border-color:#0a84ff}
+  .out-box{color:#f2f2f7}
 }
 </style>
 </head>
 <body>
-<h1>日報作成</h1>
+<div id="editorScreen" class="screen active">
+  <div class="top-pane">
+    <h1>日報作成</h1>
+    <div class="top-grid">
+      <div class="top-card wide">
+        <div class="sec-title">基本情報</div>
+        <div class="field">
+          <label>担当者名</label>
+          <input type="text" id="staff" value="工藤" inputmode="text">
+        </div>
+        <div class="field">
+          <label>作成日</label>
+          <input type="text" id="reportDate" readonly>
+        </div>
+      </div>
 
-<div class="section">
-  <div class="sec-title">基本情報</div>
-  <div class="field">
-    <label>担当者名</label>
-    <input type="text" id="staff" placeholder="工藤" inputmode="text">
+      <div class="top-card">
+        <div class="sec-title">賃貸 — 売上・実績</div>
+        <div class="field"><label>売上目標（円）</label><input type="number" id="target" placeholder="500000" inputmode="numeric"></div>
+        <div class="field"><label>当月実績（円）</label><input type="number" id="actual" placeholder="85000" inputmode="numeric"></div>
+        <div class="field"><label>当月見込み（円）</label><input type="number" id="forecast" placeholder="505455" inputmode="numeric"></div>
+        <div class="field"><label>契約件数</label><input type="number" id="contracts" placeholder="0" inputmode="numeric"></div>
+        <div class="field"><label>内AD件数</label><input type="number" id="ad" placeholder="0" inputmode="numeric"></div>
+      </div>
+
+      <div class="top-card">
+        <div class="sec-title">来店客数（当日）</div>
+        <div class="field"><label>予約</label><input type="number" id="v1" placeholder="0" inputmode="numeric"></div>
+        <div class="field"><label>飛込</label><input type="number" id="v2" placeholder="0" inputmode="numeric"></div>
+        <div class="field"><label>再来店</label><input type="number" id="v3" placeholder="0" inputmode="numeric"></div>
+        <div class="field"><label>その他</label><input type="number" id="v4" placeholder="0" inputmode="numeric"></div>
+      </div>
+
+      <div class="top-card">
+        <div class="sec-title">物件登録件数</div>
+        <div class="field"><label>at home 目標</label><input type="number" id="ah1" placeholder="40" inputmode="numeric"></div>
+        <div class="field"><label>at home 実績</label><input type="number" id="ah2" placeholder="39" inputmode="numeric"></div>
+        <div class="field"><label>SUUMO 目標</label><input type="number" id="su1" placeholder="10" inputmode="numeric"></div>
+        <div class="field"><label>SUUMO 実績</label><input type="number" id="su2" placeholder="10" inputmode="numeric"></div>
+        <div class="field"><label>ホームページ</label><input type="number" id="hp" placeholder="44" inputmode="numeric"></div>
+      </div>
+
+      <div class="top-card">
+        <div class="sec-title">賃貸空室</div>
+        <div class="field"><label>管理物件</label><input type="number" id="r1" placeholder="6" inputmode="numeric"></div>
+        <div class="field"><label>一般物件</label><input type="number" id="r2" placeholder="0" inputmode="numeric"></div>
+        <div class="field"><label>内空き予定</label><input type="number" id="r3" placeholder="3" inputmode="numeric"></div>
+        <div class="field"><label>内サブリース</label><input type="number" id="r4" placeholder="0" inputmode="numeric"></div>
+      </div>
+    </div>
   </div>
-  <div class="field">
-    <label>作成日</label>
-    <input type="text" id="reportDate" readonly>
+
+  <div class="section">
+    <div class="sec-title">空き物件状況</div>
+    <div id="propList"></div>
+  </div>
+
+  <div class="action-bar">
+    <button type="button" class="add-btn" onclick="addProp()">＋ 物件を追加</button>
+    <button type="button" class="gen-btn" onclick="generate()">日報を生成する</button>
   </div>
 </div>
 
-<div class="section">
-  <div class="sec-title">賃貸 — 売上・実績</div>
-  <div class="field"><label>売上目標（円）</label><input type="number" id="target" placeholder="500000" inputmode="numeric"></div>
-  <div class="field"><label>当月実績（円）</label><input type="number" id="actual" placeholder="85000" inputmode="numeric"></div>
-  <div class="field"><label>当月見込み（円）</label><input type="number" id="forecast" placeholder="505455" inputmode="numeric"></div>
-  <div class="field"><label>契約件数</label><input type="number" id="contracts" placeholder="0" inputmode="numeric"></div>
-  <div class="field"><label>内AD件数</label><input type="number" id="ad" placeholder="0" inputmode="numeric"></div>
-</div>
-
-<div class="section">
-  <div class="sec-title">来店客数（当日）</div>
-  <div class="field"><label>予約</label><input type="number" id="v1" placeholder="0" inputmode="numeric"></div>
-  <div class="field"><label>飛込</label><input type="number" id="v2" placeholder="0" inputmode="numeric"></div>
-  <div class="field"><label>再来店</label><input type="number" id="v3" placeholder="0" inputmode="numeric"></div>
-  <div class="field"><label>その他</label><input type="number" id="v4" placeholder="0" inputmode="numeric"></div>
-</div>
-
-<div class="section">
-  <div class="sec-title">物件登録件数</div>
-  <div class="field"><label>at home 目標</label><input type="number" id="ah1" placeholder="40" inputmode="numeric"></div>
-  <div class="field"><label>at home 実績</label><input type="number" id="ah2" placeholder="39" inputmode="numeric"></div>
-  <div class="field"><label>SUUMO 目標</label><input type="number" id="su1" placeholder="10" inputmode="numeric"></div>
-  <div class="field"><label>SUUMO 実績</label><input type="number" id="su2" placeholder="10" inputmode="numeric"></div>
-  <div class="field"><label>ホームページ</label><input type="number" id="hp" placeholder="44" inputmode="numeric"></div>
-</div>
-
-<div class="section">
-  <div class="sec-title">賃貸空室</div>
-  <div class="field"><label>管理物件</label><input type="number" id="r1" placeholder="6" inputmode="numeric"></div>
-  <div class="field"><label>一般物件</label><input type="number" id="r2" placeholder="0" inputmode="numeric"></div>
-  <div class="field"><label>内空き予定</label><input type="number" id="r3" placeholder="3" inputmode="numeric"></div>
-  <div class="field"><label>内サブリース</label><input type="number" id="r4" placeholder="0" inputmode="numeric"></div>
-</div>
-
-<div class="section">
-  <div class="sec-title">空き物件状況</div>
-  <div id="propList"></div>
-</div>
-<div class="action-bar">
-  <button type="button" class="add-btn" onclick="addProp()">＋ 物件を追加</button>
-  <button type="button" class="gen-btn" onclick="generate()">日報を生成する</button>
-  <button type="button" class="copy-btn" id="copyBtn" onclick="copyOut()" disabled>コピーする</button>
-</div>
-
-<div class="out-wrap" id="outWrap">
-  <div class="out-box" id="out"></div>
+<div id="reportScreen" class="screen">
+  <div class="report-head">
+    <button type="button" class="back-btn" onclick="goBackToEditor()"><span class="arrow">←</span>戻る</button>
+  </div>
+  <div class="out-wrap" id="outWrap">
+    <div class="out-box" id="out"></div>
+    <button type="button" class="copy-btn" id="copyBtn" onclick="copyOut()">コピーする</button>
+  </div>
 </div>
 
 <script>
@@ -139,51 +160,23 @@ const initProps=[
   ['BARN OWL 102','通常',4,1],
   ['ヒルズガレージ105','賃料査定中',0,0],
   ['ヴィラーヌ高崎','通常',8,0],
-  ['カーサロッソ202','ネット掲載準備中',0,0],
+  ['カーサロッソ202','ネット掲載準備中',0,0]
 ];
 
-function addProp(name='',status='通常',h=0,s=0){
-  const id=pid++;
-  const div=document.createElement('div');
-  div.className='prop-block';
-  div.id='pb'+id;
-  const tagsHtml=statusLabels.map(l=>`<span class="tag${l===status?' on':''}" onclick="toggleTag(this,'${id}')">${l}</span>`).join('');
-  div.innerHTML=`
-<div class="del-row"><button class="del-btn" onclick="document.getElementById('pb${id}').remove()">削除</button></div>
-<input class="prop-name" id="pn${id}" type="text" placeholder="物件名・部屋番号" value="${name}" inputmode="text">
-<div class="tags" id="sr${id}">${tagsHtml}</div>
-<div class="nums-row">
-  <div class="num-field"><label>🈳 反響</label><input type="number" id="ph${id}" value="${h}" inputmode="numeric"></div>
-  <div class="num-field"><label>🈸 反響</label><input type="number" id="ps${id}" value="${s}" inputmode="numeric"></div>
-</div>`;
-  document.getElementById('propList').appendChild(div);
-}
-
-function toggleTag(el,id){
-  document.getElementById('sr'+id).querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));
-  el.classList.add('on');
-}
-
-function getStatus(id){
-  const on=document.getElementById('sr'+id).querySelector('.tag.on');
-  return on?on.textContent:'通常';
-}
-
-initProps.forEach(p=>addProp(p[0],p[1],p[2],p[3]));
-
 function getEl(id){return document.getElementById(id);}
-function getVal(id){
+function getVal(id,usePlaceholder){
   const el=getEl(id);
   if(!el)return '';
   if(el.value!=='')return el.value;
-  if(typeof el.placeholder==='string'&&el.placeholder!=='')return el.placeholder;
+  if(usePlaceholder&&typeof el.placeholder==='string'&&el.placeholder!=='')return el.placeholder;
   return '';
 }
 function gv(id){
-  const v=getVal(id);
+  const v=getVal(id,true);
   return v===''?'0':v;
 }
-function yen(n){return parseInt(n||0).toLocaleString('ja-JP')+'円';}
+function yen(n){return parseInt(n||0,10).toLocaleString('ja-JP')+'円';}
+
 function formatDateWithDow(d){
   const days=['日','月','火','水','木','金','土'];
   return `${d.getMonth()+1}/${d.getDate()}（${days[d.getDay()]}）`;
@@ -192,87 +185,144 @@ function syncToday(){
   const el=getEl('reportDate');
   if(el)el.value=formatDateWithDow(new Date());
 }
-syncToday();
 
-function generate(skipScroll){
+function addProp(name='',status='通常',h=0,s=0){
+  const id=pid++;
+  const div=document.createElement('div');
+  div.className='prop-block';
+  div.id='pb'+id;
+  const tagsHtml=statusLabels.map(label=>`<span class="tag${label===status?' on':''}" onclick="toggleTag(this,${id})">${label}</span>`).join('');
+  div.innerHTML=`
+<div class="del-row"><button class="del-btn" onclick="removeProp(${id})">削除</button></div>
+<input class="prop-name" id="pn${id}" type="text" placeholder="物件名・部屋番号" value="${name}" inputmode="text">
+<div class="tags" id="sr${id}">${tagsHtml}</div>
+<div class="nums-row">
+  <div class="num-field"><label>🈳 反響</label><input type="number" id="ph${id}" value="${h}" inputmode="numeric"></div>
+  <div class="num-field"><label>🈸 反響</label><input type="number" id="ps${id}" value="${s}" inputmode="numeric"></div>
+</div>`;
+  getEl('propList').appendChild(div);
+}
+
+function removeProp(id){
+  const target=getEl('pb'+id);
+  if(target)target.remove();
+}
+
+function toggleTag(el,id){
+  const wrap=getEl('sr'+id);
+  if(!wrap)return;
+  wrap.querySelectorAll('.tag').forEach(tag=>tag.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function getStatus(id){
+  const wrap=getEl('sr'+id);
+  const on=wrap?wrap.querySelector('.tag.on'):null;
+  return on?on.textContent:'通常';
+}
+
+function showReport(){
+  getEl('editorScreen').classList.remove('active');
+  getEl('reportScreen').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goBackToEditor(){
+  getEl('reportScreen').classList.remove('active');
+  getEl('editorScreen').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function generate(){
   const d=new Date();
-  const m=d.getMonth()+1,day=d.getDate(),reiwa=d.getFullYear()-2018;
+  const m=d.getMonth()+1;
+  const reiwa=d.getFullYear()-2018;
   const dateLabel=formatDateWithDow(d);
   syncToday();
-  const staff=getVal('staff')||'　';
-  const L=[];
-  L.push(`${dateLabel}   担当　${staff}`);
-  L.push('1️⃣賃貸　');
-  L.push(`令和${reiwa}年${m}月目標`);
-  L.push(`売上目標 ${yen(gv('target'))}`);
-  L.push(`当月実績 ${yen(gv('actual'))}`);
-  L.push(`当月見込み ${yen(gv('forecast'))}`);
-  L.push(`契約件数　　　　${gv('contracts')}件`);
-  L.push(`(内AD                  ${gv('ad')}件)`);
-  L.push('');
-  L.push('◉来店客数');
-  L.push('当日');
-  L.push(`予約　　　${gv('v1')}件`);
-  L.push(`飛込　　　${gv('v2')}件`);
-  L.push(`再来店　　${gv('v3')}件`);
-  L.push(`その他　　${gv('v4')}件`);
-  L.push('');
-  L.push('◉物件登録件数');
-  L.push(`at home ${gv('ah1')}件     ${gv('ah2')}件`);
-  L.push(`SUUMO  ${gv('su1')}件     ${gv('su2')}件`);
-  L.push(`ホームページ        ${gv('hp')}件`);
-  L.push('');
-  L.push('◉賃貸空室');
-  L.push(`管理物件　　　　${gv('r1')}件`);
-  L.push(`一般物件　　　　${gv('r2')}件`);
-  L.push(`内空き予定　　　${gv('r3')}件`);
-  L.push(`内サブリース　　${gv('r4')}件`);
-  L.push('');
-  L.push('【空き物件状況】');
-  L.push('　反響月累計');
+  const staff=getVal('staff',false)||'　';
+  const lines=[];
+  lines.push(`${dateLabel}   担当　${staff}`);
+  lines.push('1️⃣賃貸　');
+  lines.push(`令和${reiwa}年${m}月目標`);
+  lines.push(`売上目標 ${yen(gv('target'))}`);
+  lines.push(`当月実績 ${yen(gv('actual'))}`);
+  lines.push(`当月見込み ${yen(gv('forecast'))}`);
+  lines.push(`契約件数　　　　${gv('contracts')}件`);
+  lines.push(`(内AD                  ${gv('ad')}件)`);
+  lines.push('');
+  lines.push('◉来店客数');
+  lines.push('当日');
+  lines.push(`予約　　　${gv('v1')}件`);
+  lines.push(`飛込　　　${gv('v2')}件`);
+  lines.push(`再来店　　${gv('v3')}件`);
+  lines.push(`その他　　${gv('v4')}件`);
+  lines.push('');
+  lines.push('◉物件登録件数');
+  lines.push(`at home ${gv('ah1')}件     ${gv('ah2')}件`);
+  lines.push(`SUUMO  ${gv('su1')}件     ${gv('su2')}件`);
+  lines.push(`ホームページ        ${gv('hp')}件`);
+  lines.push('');
+  lines.push('◉賃貸空室');
+  lines.push(`管理物件　　　　${gv('r1')}件`);
+  lines.push(`一般物件　　　　${gv('r2')}件`);
+  lines.push(`内空き予定　　　${gv('r3')}件`);
+  lines.push(`内サブリース　　${gv('r4')}件`);
+  lines.push('');
+  lines.push('【空き物件状況】');
+  lines.push('　反響月累計');
+
   let idx=1;
-  document.getElementById('propList').querySelectorAll('.prop-block').forEach(bl=>{
-    const i=bl.id.replace('pb','');
-    const name=getVal('pn'+i);
+  getEl('propList').querySelectorAll('.prop-block').forEach(block=>{
+    const i=block.id.replace('pb','');
+    const name=getVal('pn'+i,false).trim();
     if(!name)return;
     const st=getStatus(i);
     const suffix=st!=='通常'?`（${st}）`:'';
-    L.push(`${idx}.${name}${suffix}`);
-    L.push(`　🈳反響 ${gv('ph'+i)}    🈸${gv('ps'+i)}`);
+    lines.push(`${idx}.${name}${suffix}`);
+    lines.push(`　🈳反響 ${gv('ph'+i)}    🈸${gv('ps'+i)}`);
     idx++;
   });
-  const text=L.join('\n');
-  document.getElementById('out').textContent=text;
-  const wrap=document.getElementById('outWrap');
-  wrap.style.display='block';
-  const btn=document.getElementById('copyBtn');
+
+  getEl('out').textContent=lines.join('\n');
+  const btn=getEl('copyBtn');
   btn.textContent='コピーする';
   btn.className='copy-btn';
-  btn.disabled=false;
-  if(!skipScroll){
-    wrap.scrollIntoView({behavior:'smooth',block:'start'});
-  }
+  showReport();
 }
 
 function copyOut(){
-  const text=document.getElementById('out').textContent;
-  const btn=document.getElementById('copyBtn');
-  if(!text||btn.disabled)return;
+  const text=getEl('out').textContent;
+  const btn=getEl('copyBtn');
+  if(!text)return;
   if(navigator.clipboard&&navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text).then(()=>showOk(btn)).catch(()=>fallback(text,btn));
-  } else { fallback(text,btn); }
+    navigator.clipboard.writeText(text).then(()=>showOk(btn)).catch(()=>fallbackCopy(text,btn));
+  }else{
+    fallbackCopy(text,btn);
+  }
 }
-function fallback(text,btn){
+
+function fallbackCopy(text,btn){
   const ta=document.createElement('textarea');
-  ta.value=text;ta.style.cssText='position:fixed;left:-9999px;top:0;font-size:16px';
-  document.body.appendChild(ta);ta.focus();ta.select();
-  try{document.execCommand('copy');showOk(btn);}catch(e){}
+  ta.value=text;
+  ta.style.cssText='position:fixed;left:-9999px;top:0;font-size:16px';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try{document.execCommand('copy');showOk(btn);}catch(_e){}
   document.body.removeChild(ta);
 }
+
 function showOk(btn){
-  btn.textContent='コピーしました！';btn.className='copy-btn ok';
-  setTimeout(()=>{btn.textContent='コピーする';btn.className='copy-btn';},2500);
+  btn.textContent='コピーしました！';
+  btn.className='copy-btn ok';
+  setTimeout(()=>{
+    btn.textContent='コピーする';
+    btn.className='copy-btn';
+  },2500);
 }
+
+initProps.forEach(p=>addProp(p[0],p[1],p[2],p[3]));
+syncToday();
 </script>
 </body>
 </html>
