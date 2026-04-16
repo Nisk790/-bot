@@ -21,7 +21,8 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .field{padding:6px 10px;border-bottom:.5px solid #e5e5ea;display:flex;align-items:center;gap:8px;min-height:30px}
 .field:last-child{border-bottom:none}
 .field label{font-size:13px;color:#1c1c1e;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.field input[type=number],.field input[type=text]{text-align:right;border:none;outline:none;font-size:14px;color:#1c1c1e;background:transparent;width:118px;max-width:55%;padding:0;min-height:20px;flex:0 0 auto}
+.field input[type=number],.field input[type=text]{text-align:right;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#f7f8fb;width:118px;max-width:55%;padding:4px 8px;min-height:28px;flex:0 0 auto;border-radius:8px}
+.field input[readonly]{background:#eceff5;color:#616671}
 .field input::placeholder{color:#c7c7cc}
 .field-value{font-size:14px;color:#6c6c70;min-width:66px;text-align:right;flex:0 0 auto}
 .top-card.sales .field input[type=number]{width:112px;max-width:none}
@@ -32,15 +33,16 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .section{background:#fff;border-radius:12px;margin:0 12px 10px;overflow:hidden}
 .prop-block{padding:10px 12px;border-bottom:.5px solid #e5e5ea}
 .prop-block:last-child{border-bottom:none}
-.prop-name{width:100%;border:none;outline:none;font-size:14px;font-weight:500;color:#1c1c1e;background:transparent;margin-bottom:8px}
+.prop-name{width:100%;border:1px solid #d8dde8;outline:none;font-size:14px;font-weight:500;color:#1c1c1e;background:#f7f8fb;margin-bottom:8px;border-radius:8px;padding:7px 9px}
 .prop-name::placeholder{color:#c7c7cc}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-.tag{font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid #c7c7cc;background:#f2f2f7;color:#6c6c70;cursor:pointer}
+.tag{font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid #c7c7cc;background:#f2f2f7;color:#6c6c70;cursor:pointer;transition:transform .08s ease,filter .08s ease}
+.tag:active{transform:scale(.97);filter:brightness(.95)}
 .tag.on{background:#007aff;color:#fff;border-color:#007aff}
 .nums-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .num-field{background:#f2f2f7;border-radius:8px;padding:8px 10px}
 .num-field label{font-size:11px;color:#6c6c70;display:block;margin-bottom:3px}
-.num-field input{width:100%;border:none;outline:none;font-size:14px;color:#1c1c1e;background:transparent}
+.num-field input{width:100%;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#fff;border-radius:8px;padding:5px 8px;min-height:28px}
 .del-row{display:flex;justify-content:flex-end;margin-bottom:4px}
 .del-btn{font-size:13px;color:#ff3b30;background:none;border:none;padding:0;cursor:pointer}
 
@@ -49,6 +51,9 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .add-btn{padding:12px;font-size:15px;min-height:46px;border:1.5px dashed #007aff;background:#fff;color:#007aff}
 .gen-btn{margin-top:8px;padding:13px;font-size:16px;min-height:48px;font-weight:700;background:#007aff;color:#fff;border:none}
 .gen-btn:disabled{opacity:.92}
+button{transition:transform .08s ease,filter .08s ease,box-shadow .12s ease}
+button:active{transform:translateY(1px) scale(.98);filter:brightness(.95)}
+button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
 .spin-arrow{display:inline-block;font-size:18px;line-height:1;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
@@ -65,6 +70,7 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .loading-overlay.hidden{opacity:0;pointer-events:none}
 .loading-panel{background:rgba(255,255,255,.92);border:1px solid rgba(0,0,0,.06);border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:10px;color:#1c1c1e;font-size:16px;font-weight:700}
 .loading-panel .spin-arrow{font-size:20px}
+.field input[type=number]:focus,.field input[type=text]:focus,.prop-name:focus,.num-field input:focus{border-color:#4e8df7;box-shadow:0 0 0 2px rgba(78,141,247,.18)}
 
 @media(max-width:360px){
   .field{padding:5px 8px}
@@ -79,6 +85,11 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
   .field{border-bottom-color:#38383a}
   .field label,.prop-name{color:#fff}
   .field input[type=number],.field input[type=text],.prop-name,.num-field input{color:#fff}
+  .field input[type=number],.field input[type=text]{background:#2a2d34;border-color:#4a4f5b}
+  .field input[readonly]{background:#26292f;color:#bcc2cf}
+  .prop-name{background:#2a2d34;border-color:#4a4f5b}
+  .num-field input{background:#1f2228;border-color:#4a4f5b}
+  .field input[type=number]:focus,.field input[type=text]:focus,.prop-name:focus,.num-field input:focus{border-color:#7ab2ff;box-shadow:0 0 0 2px rgba(122,178,255,.2)}
   .field-value{color:#ebebf5}
   .num-field{background:#2c2c2e}
   .tag{background:#2c2c2e;border-color:#48484a;color:#8e8e93}
@@ -152,7 +163,7 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
   </div>
 
   <div class="action-bar">
-    <button type="button" class="add-btn" onclick="addProp()">＋ 物件を追加</button>
+    <button type="button" class="add-btn" onclick="addPropAndFocus()">＋ 物件を追加</button>
     <button type="button" class="gen-btn" id="generateBtn" onclick="handleGenerate()">日報を生成する</button>
   </div>
 </div>
@@ -237,7 +248,7 @@ function syncToday(){
   if(el)el.value=formatDateWithDow(new Date());
 }
 
-function addProp(name='',status='通常',h=0,s=0){
+function addProp(name='',status='通常',h=0,s=0,focusAfterAdd=false){
   const id=pid++;
   const div=document.createElement('div');
   div.className='prop-block';
@@ -252,6 +263,19 @@ function addProp(name='',status='通常',h=0,s=0){
   <div class="num-field"><label>🈸 反響</label><input type="number" id="ps${id}" value="${s}" inputmode="numeric"></div>
 </div>`;
   getEl('propList').appendChild(div);
+  if(focusAfterAdd){
+    const nameInput=getEl('pn'+id);
+    div.scrollIntoView({behavior:'smooth',block:'center'});
+    setTimeout(()=>{
+      if(!nameInput)return;
+      nameInput.focus();
+      nameInput.select();
+    },220);
+  }
+}
+
+function addPropAndFocus(){
+  addProp('', '通常', 0, 0, true);
 }
 
 function removeProp(id){
