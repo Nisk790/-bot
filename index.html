@@ -21,11 +21,11 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .field{padding:6px 10px;border-bottom:.5px solid #e5e5ea;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:8px;min-height:30px}
 .field:last-child{border-bottom:none}
 .field label{font-size:13px;color:#1c1c1e;min-width:0;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25;word-break:normal;overflow-wrap:anywhere}
-.field input[type=number],.field input[type=text]{text-align:right;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#f7f8fb;width:118px;max-width:55%;padding:4px 8px;min-height:28px;flex:0 0 auto;border-radius:8px}
+.field input[type=number],.field input[type=text]{text-align:right;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#f7f8fb;width:118px;max-width:55%;padding:4px 8px;min-height:28px;flex:0 0 auto;border-radius:8px;justify-self:end;font-variant-numeric:tabular-nums}
 .field input[readonly]{background:#eceff5;color:#616671}
 .field input::placeholder{color:#c7c7cc}
-.ios .field input.ios-num,.ios .num-field input.ios-num{text-align:left !important}
-.field-value{font-size:14px;color:#6c6c70;min-width:66px;text-align:right;flex:0 0 auto}
+.ios .field input.ios-num,.ios .num-field input.ios-num{text-align:right !important}
+.field-value{font-size:14px;color:#6c6c70;min-width:66px;text-align:right;flex:0 0 auto;justify-self:end;font-variant-numeric:tabular-nums}
 .top-card.sales .field{grid-template-columns:minmax(0,1fr) 98px}
 .top-card.sales .field input[type=number],.top-card.sales .field input.ios-num{width:98px;max-width:98px}
 .top-card.register .field{grid-template-columns:minmax(0,1fr) 98px}
@@ -50,7 +50,7 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .nums-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .num-field{background:#f2f2f7;border-radius:8px;padding:8px 10px}
 .num-field label{font-size:11px;color:#6c6c70;display:block;margin-bottom:3px}
-.num-field input{width:100%;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#fff;border-radius:8px;padding:5px 8px;min-height:28px}
+.num-field input{width:100%;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#fff;border-radius:8px;padding:5px 8px;min-height:28px;text-align:right;font-variant-numeric:tabular-nums}
 .del-row{display:flex;justify-content:flex-end;margin-bottom:4px}
 .del-btn{font-size:13px;color:#ff3b30;background:none;border:none;padding:0;cursor:pointer}
 
