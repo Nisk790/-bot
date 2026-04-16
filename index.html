@@ -256,6 +256,48 @@ function isIOSDevice(){
   return iOS||iPadOS;
 }
 
+let lastHapticAt=0;
+function triggerIOSHaptic(){
+  if(!isIOSDevice())return;
+  const now=Date.now();
+  if(now-lastHapticAt<80)return;
+  lastHapticAt=now;
+
+  try{
+    if(window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.HapticFeedback){
+      window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+      return;
+    }
+  }catch(_e){}
+
+  try{
+    const handlers=window.webkit&&window.webkit.messageHandlers;
+    if(handlers&&handlers.hapticFeedback){
+      handlers.hapticFeedback.postMessage({style:'light'});
+      return;
+    }
+    if(handlers&&handlers.haptic){
+      handlers.haptic.postMessage('light');
+      return;
+    }
+  }catch(_e){}
+
+  try{
+    if(navigator.vibrate)navigator.vibrate(10);
+  }catch(_e){}
+}
+
+function setupIOSButtonHaptics(){
+  if(!isIOSDevice())return;
+  document.addEventListener('touchstart',e=>{
+    const target=e.target;
+    if(!(target instanceof Element))return;
+    const btn=target.closest('button');
+    if(!btn||btn.disabled)return;
+    triggerIOSHaptic();
+  },{passive:true});
+}
+
 function moveCaretToEnd(el){
   if(!el)return;
   try{
@@ -522,6 +564,7 @@ function showOk(btn){
 const lastSnapshot=loadLastSnapshot();
 applyInitialFieldValues(lastSnapshot);
 setupIOSNumericCaretFix();
+setupIOSButtonHaptics();
 if(lastSnapshot&&Array.isArray(lastSnapshot.props)&&lastSnapshot.props.length){
   lastSnapshot.props.forEach(p=>{
     const name=typeof p.name==='string'?p.name:'';
