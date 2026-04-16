@@ -24,9 +24,10 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .field input[type=number],.field input[type=text]{text-align:right;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#f7f8fb;width:118px;max-width:55%;padding:4px 8px;min-height:28px;flex:0 0 auto;border-radius:8px}
 .field input[readonly]{background:#eceff5;color:#616671}
 .field input::placeholder{color:#c7c7cc}
+.ios .field input.ios-num,.ios .num-field input.ios-num{text-align:left !important}
 .field-value{font-size:14px;color:#6c6c70;min-width:66px;text-align:right;flex:0 0 auto}
-.top-card.sales .field input[type=number]{width:112px;max-width:none}
-.top-card.visitor .field input[type=number]{width:46px;max-width:46px}
+.top-card.sales .field input[type=number],.top-card.sales .field input.ios-num{width:112px;max-width:none}
+.top-card.visitor .field input[type=number],.top-card.visitor .field input.ios-num{width:46px;max-width:46px}
 .top-card.visitor .field label{font-size:12px}
 .top-card.sales .field label,.top-card.register .field label{font-size:12px}
 
@@ -248,6 +249,51 @@ function syncToday(){
   if(el)el.value=formatDateWithDow(new Date());
 }
 
+function isIOSDevice(){
+  const ua=navigator.userAgent||'';
+  const iOS=/iPad|iPhone|iPod/.test(ua);
+  const iPadOS=navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1;
+  return iOS||iPadOS;
+}
+
+function moveCaretToEnd(el){
+  if(!el)return;
+  try{
+    const len=el.value.length;
+    el.setSelectionRange(len,len);
+  }catch(_e){}
+}
+
+function normalizeIOSNumericInputs(root){
+  if(!isIOSDevice())return;
+  const scope=root||document;
+  scope.querySelectorAll('input[type=\"number\"]').forEach(input=>{
+    input.setAttribute('type','text');
+    input.setAttribute('inputmode','numeric');
+    input.setAttribute('pattern','[0-9]*');
+    input.classList.add('ios-num');
+  });
+}
+
+function setupIOSNumericCaretFix(){
+  if(!isIOSDevice())return;
+  document.body.classList.add('ios');
+  normalizeIOSNumericInputs(document);
+  document.addEventListener('focusin',e=>{
+    const target=e.target;
+    if(!(target instanceof HTMLInputElement))return;
+    if(!target.classList.contains('ios-num'))return;
+    setTimeout(()=>moveCaretToEnd(target),0);
+  });
+  document.addEventListener('input',e=>{
+    const target=e.target;
+    if(!(target instanceof HTMLInputElement))return;
+    if(!target.classList.contains('ios-num'))return;
+    const next=target.value.replace(/[^0-9]/g,'');
+    if(next!==target.value)target.value=next;
+  });
+}
+
 function addProp(name='',status='通常',h=0,s=0,focusAfterAdd=false){
   const id=pid++;
   const div=document.createElement('div');
@@ -263,6 +309,7 @@ function addProp(name='',status='通常',h=0,s=0,focusAfterAdd=false){
   <div class="num-field"><label>🈸 反響</label><input type="number" id="ps${id}" value="${s}" inputmode="numeric"></div>
 </div>`;
   getEl('propList').appendChild(div);
+  normalizeIOSNumericInputs(div);
   if(focusAfterAdd){
     const nameInput=getEl('pn'+id);
     div.scrollIntoView({behavior:'smooth',block:'center'});
@@ -474,6 +521,7 @@ function showOk(btn){
 
 const lastSnapshot=loadLastSnapshot();
 applyInitialFieldValues(lastSnapshot);
+setupIOSNumericCaretFix();
 if(lastSnapshot&&Array.isArray(lastSnapshot.props)&&lastSnapshot.props.length){
   lastSnapshot.props.forEach(p=>{
     const name=typeof p.name==='string'?p.name:'';
