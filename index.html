@@ -256,9 +256,16 @@ function isIOSDevice(){
   return iOS||iPadOS;
 }
 
+function isStandalonePWA(){
+  const byMedia=window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches;
+  const byIOSFlag=window.navigator&&window.navigator.standalone===true;
+  return !!(byMedia||byIOSFlag);
+}
+
 let lastHapticAt=0;
 function triggerIOSHaptic(){
-  if(!isIOSDevice())return;
+  const canVibrate=typeof navigator.vibrate==='function';
+  if(!isIOSDevice()&&!isStandalonePWA()&&!canVibrate)return;
   const now=Date.now();
   if(now-lastHapticAt<80)return;
   lastHapticAt=now;
@@ -283,12 +290,13 @@ function triggerIOSHaptic(){
   }catch(_e){}
 
   try{
-    if(navigator.vibrate)navigator.vibrate(10);
+    if(canVibrate)navigator.vibrate([8]);
   }catch(_e){}
 }
 
 function setupIOSButtonHaptics(){
-  if(!isIOSDevice())return;
+  const canVibrate=typeof navigator.vibrate==='function';
+  if(!isIOSDevice()&&!isStandalonePWA()&&!canVibrate)return;
   document.addEventListener('touchstart',e=>{
     const target=e.target;
     if(!(target instanceof Element))return;
@@ -296,6 +304,14 @@ function setupIOSButtonHaptics(){
     if(!btn||btn.disabled)return;
     triggerIOSHaptic();
   },{passive:true});
+  document.addEventListener('keydown',e=>{
+    const target=e.target;
+    if(!(target instanceof Element))return;
+    if(e.key!=='Enter'&&e.key!==' ')return;
+    const btn=target.closest('button');
+    if(!btn||btn.disabled)return;
+    triggerIOSHaptic();
+  });
 }
 
 function moveCaretToEnd(el){
