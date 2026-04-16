@@ -18,22 +18,29 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .top-card{background:#fff;border-radius:12px;overflow:hidden}
 .top-card.wide{grid-column:1/-1}
 .sec-title{font-size:11px;font-weight:700;color:#6c6c70;letter-spacing:.04em;padding:8px 10px 4px;text-transform:uppercase}
-.field{padding:6px 10px;border-bottom:.5px solid #e5e5ea;display:flex;align-items:center;gap:8px;min-height:30px}
+.field{padding:6px 10px;border-bottom:.5px solid #e5e5ea;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:8px;min-height:30px}
 .field:last-child{border-bottom:none}
-.field label{font-size:13px;color:#1c1c1e;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.field label{font-size:13px;color:#1c1c1e;min-width:0;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25;word-break:normal;overflow-wrap:anywhere}
 .field input[type=number],.field input[type=text]{text-align:right;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#f7f8fb;width:118px;max-width:55%;padding:4px 8px;min-height:28px;flex:0 0 auto;border-radius:8px}
 .field input[readonly]{background:#eceff5;color:#616671}
 .field input::placeholder{color:#c7c7cc}
 .ios .field input.ios-num,.ios .num-field input.ios-num{text-align:left !important}
 .field-value{font-size:14px;color:#6c6c70;min-width:66px;text-align:right;flex:0 0 auto}
-.top-card.sales .field input[type=number],.top-card.sales .field input.ios-num{width:112px;max-width:none}
+.top-card.sales .field{grid-template-columns:minmax(0,1fr) 98px}
+.top-card.sales .field input[type=number],.top-card.sales .field input.ios-num{width:98px;max-width:98px}
+.top-card.register .field{grid-template-columns:minmax(0,1fr) 98px}
+.top-card.register .field input[type=number],.top-card.register .field input.ios-num{width:98px;max-width:98px}
+.top-card.register .field .field-value{display:inline-flex;align-items:center;justify-content:flex-end;width:98px;min-width:98px;min-height:28px;padding:4px 8px;border:1px solid #d8dde8;border-radius:8px;background:#f7f8fb;color:#616671}
+.top-card.vacancy .field{grid-template-columns:minmax(0,1fr) 52px}
+.top-card.vacancy .field input[type=number],.top-card.vacancy .field input.ios-num{width:52px;max-width:52px}
 .top-card.visitor .field input[type=number],.top-card.visitor .field input.ios-num{width:46px;max-width:46px}
 .top-card.visitor .field label{font-size:12px}
 .top-card.sales .field label,.top-card.register .field label{font-size:12px}
 
 .section{background:#fff;border-radius:12px;margin:0 12px 10px;overflow:hidden}
-.prop-block{padding:10px 12px;border-bottom:.5px solid #e5e5ea}
+.prop-block{padding:10px 12px;border-bottom:.5px solid #e5e5ea;max-height:420px;overflow:hidden;transform-origin:top center;transition:max-height .34s cubic-bezier(.22,.61,.36,1),padding .28s ease,margin .28s ease,opacity .24s ease,transform .24s ease,border-color .2s ease}
 .prop-block:last-child{border-bottom:none}
+.prop-block.is-removing{opacity:0;transform:translateY(-6px);padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-bottom-color:transparent;pointer-events:none}
 .prop-name{width:100%;border:1px solid #d8dde8;outline:none;font-size:14px;font-weight:500;color:#1c1c1e;background:#f7f8fb;margin-bottom:8px;border-radius:8px;padding:7px 9px}
 .prop-name::placeholder{color:#c7c7cc}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
@@ -52,8 +59,9 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .add-btn{padding:12px;font-size:15px;min-height:46px;border:1.5px dashed #007aff;background:#fff;color:#007aff}
 .gen-btn{margin-top:8px;padding:13px;font-size:16px;min-height:48px;font-weight:700;background:#007aff;color:#fff;border:none}
 .gen-btn:disabled{opacity:.92}
-button{transition:transform .08s ease,filter .08s ease,box-shadow .12s ease}
-button:active{transform:translateY(1px) scale(.98);filter:brightness(.95)}
+.add-btn,.gen-btn,.copy-btn{box-shadow:0 6px 14px rgba(0,0,0,.18)}
+button{transition:transform .06s ease,filter .06s ease,box-shadow .08s ease;box-shadow:0 4px 10px rgba(0,0,0,.14)}
+button:active{transform:translateY(3px) scale(.94);filter:brightness(.86) saturate(1.08);box-shadow:inset 0 2px 8px rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.2)}
 button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
 .spin-arrow{display:inline-block;font-size:18px;line-height:1;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -74,7 +82,7 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
 .field input[type=number]:focus,.field input[type=text]:focus,.prop-name:focus,.num-field input:focus{border-color:#4e8df7;box-shadow:0 0 0 2px rgba(78,141,247,.18)}
 
 @media(max-width:360px){
-  .field{padding:5px 8px}
+  .field{padding:5px 8px;grid-template-columns:minmax(0,1fr) auto}
   .field label{font-size:12px}
   .field input[type=number],.field input[type=text]{font-size:13px;width:92px}
 }
@@ -89,6 +97,7 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
   .field input[type=number],.field input[type=text]{background:#2a2d34;border-color:#4a4f5b}
   .field input[readonly]{background:#26292f;color:#bcc2cf}
   .prop-name{background:#2a2d34;border-color:#4a4f5b}
+  .top-card.register .field .field-value{background:#2a2d34;border-color:#4a4f5b;color:#bcc2cf}
   .num-field input{background:#1f2228;border-color:#4a4f5b}
   .field input[type=number]:focus,.field input[type=text]:focus,.prop-name:focus,.num-field input:focus{border-color:#7ab2ff;box-shadow:0 0 0 2px rgba(122,178,255,.2)}
   .field-value{color:#ebebf5}
@@ -148,7 +157,7 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
         <div class="field"><label>ホームページ</label><input type="number" id="hp" placeholder="44" inputmode="numeric"></div>
       </div>
 
-      <div class="top-card">
+      <div class="top-card vacancy">
         <div class="sec-title">賃貸空室</div>
         <div class="field"><label>管理物件</label><input type="number" id="r1" placeholder="6" inputmode="numeric"></div>
         <div class="field"><label>一般物件</label><input type="number" id="r2" placeholder="0" inputmode="numeric"></div>
@@ -385,7 +394,22 @@ function addPropAndFocus(){
 
 function removeProp(id){
   const target=getEl('pb'+id);
-  if(target)target.remove();
+  if(!target||target.classList.contains('is-removing'))return;
+  target.style.maxHeight=target.scrollHeight+'px';
+  target.getBoundingClientRect();
+  target.classList.add('is-removing');
+  target.style.maxHeight='0px';
+
+  let done=false;
+  const finalize=()=>{
+    if(done)return;
+    done=true;
+    target.remove();
+  };
+  target.addEventListener('transitionend',e=>{
+    if(e.propertyName==='max-height')finalize();
+  },{once:true});
+  setTimeout(finalize,450);
 }
 
 function toggleTag(el,id){
