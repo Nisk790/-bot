@@ -31,8 +31,8 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .top-card.register .field{grid-template-columns:minmax(0,1fr) 98px}
 .top-card.register .field input[type=number],.top-card.register .field input.ios-num{width:98px;max-width:98px}
 .top-card.register .field .field-value{display:inline-flex;align-items:center;justify-content:flex-end;width:98px;min-width:98px;min-height:28px;padding:4px 8px;border:1px solid #d8dde8;border-radius:8px;background:#f7f8fb;color:#616671}
-.top-card.vacancy .field{grid-template-columns:minmax(0,1fr) 52px}
-.top-card.vacancy .field input[type=number],.top-card.vacancy .field input.ios-num{width:52px;max-width:52px}
+.top-card.vacancy .field{grid-template-columns:minmax(0,1fr) 46px}
+.top-card.vacancy .field input[type=number],.top-card.vacancy .field input.ios-num{width:46px;max-width:46px}
 .top-card.visitor .field input[type=number],.top-card.visitor .field input.ios-num{width:46px;max-width:46px}
 .top-card.visitor .field label{font-size:12px}
 .top-card.sales .field label,.top-card.register .field label{font-size:12px}
@@ -44,9 +44,9 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .prop-name{width:100%;border:1px solid #d8dde8;outline:none;font-size:14px;font-weight:500;color:#1c1c1e;background:#f7f8fb;margin-bottom:8px;border-radius:8px;padding:7px 9px}
 .prop-name::placeholder{color:#c7c7cc}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-.tag{font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid #c7c7cc;background:#f2f2f7;color:#6c6c70;cursor:pointer;transition:transform .08s ease,filter .08s ease}
-.tag:active{transform:scale(.97);filter:brightness(.95)}
-.tag.on{background:#007aff;color:#fff;border-color:#007aff}
+.tag{font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid #c7c7cc;background:#f2f2f7;color:#6c6c70;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;user-select:none;transition:transform .06s ease,filter .06s ease,box-shadow .08s ease;box-shadow:0 3px 7px rgba(0,0,0,.14)}
+.tag:active{transform:translateY(2px) scale(.93);filter:brightness(.85) saturate(1.08);box-shadow:inset 0 2px 6px rgba(0,0,0,.25),0 1px 1px rgba(0,0,0,.15)}
+.tag.on{background:#007aff;color:#fff;border-color:#007aff;box-shadow:0 3px 9px rgba(0,122,255,.35)}
 .nums-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .num-field{background:#f2f2f7;border-radius:8px;padding:8px 10px}
 .num-field label{font-size:11px;color:#6c6c70;display:block;margin-bottom:3px}
@@ -309,16 +309,18 @@ function setupIOSButtonHaptics(){
   document.addEventListener('touchstart',e=>{
     const target=e.target;
     if(!(target instanceof Element))return;
-    const btn=target.closest('button');
-    if(!btn||btn.disabled)return;
+    const control=target.closest('button,.tag');
+    if(!control)return;
+    if(control instanceof HTMLButtonElement&&control.disabled)return;
     triggerIOSHaptic();
   },{passive:true});
   document.addEventListener('keydown',e=>{
     const target=e.target;
     if(!(target instanceof Element))return;
     if(e.key!=='Enter'&&e.key!==' ')return;
-    const btn=target.closest('button');
-    if(!btn||btn.disabled)return;
+    const control=target.closest('button,.tag');
+    if(!control)return;
+    if(control instanceof HTMLButtonElement&&control.disabled)return;
     triggerIOSHaptic();
   });
 }
