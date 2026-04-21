@@ -22,7 +22,8 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .field:last-child{border-bottom:none}
 .field label{font-size:13px;color:#1c1c1e;min-width:0;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25;word-break:normal;overflow-wrap:anywhere}
 .field input[type=number],.field input[type=text]{text-align:right;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#f7f8fb;width:118px;max-width:55%;padding:4px 8px;min-height:28px;flex:0 0 auto;border-radius:8px;justify-self:end;font-variant-numeric:tabular-nums}
-.field #reportDate{width:160px;max-width:72%}
+.field.field-date{grid-template-columns:minmax(0,1fr) auto}
+.field.field-date #reportDate{width:146px;max-width:68vw;text-align:center;font-size:13px;padding:4px 6px}
 .field input[readonly]{background:#eceff5;color:#616671}
 .field input::placeholder{color:#c7c7cc}
 .ios .field input.ios-num,.ios .num-field input.ios-num{text-align:right !important}
@@ -129,7 +130,7 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
           <label>担当者名</label>
           <input type="text" id="staff" value="工藤" inputmode="text">
         </div>
-        <div class="field">
+        <div class="field field-date">
           <label>作成日</label>
           <input type="text" id="reportDate" readonly>
         </div>
@@ -306,16 +307,38 @@ function syncToday(){
   if(el)el.value=formatFullDateWithDow(new Date());
 }
 
+function isEditableControl(el){
+  if(el instanceof HTMLInputElement)return !el.readOnly&&!el.disabled;
+  if(el instanceof HTMLTextAreaElement)return !el.readOnly&&!el.disabled;
+  if(el instanceof HTMLSelectElement)return !el.disabled;
+  return false;
+}
+
 function forceIOSZoomOut(){
+  if(!isIOSDevice())return;
+  if(isEditableControl(document.activeElement))return;
   const viewport=document.querySelector('meta[name="viewport"]');
   if(!viewport)return;
   const fallback='width=device-width, initial-scale=1.0, viewport-fit=cover';
   const original=viewport.getAttribute('content')||fallback;
   if(!viewport.dataset.defaultViewport)viewport.dataset.defaultViewport=original;
-  viewport.setAttribute('content','width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover');
+  viewport.setAttribute('content','width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
   setTimeout(()=>{
     viewport.setAttribute('content',viewport.dataset.defaultViewport||fallback);
-  },140);
+  },320);
+}
+
+let iosZoomOutTimer=0;
+function scheduleIOSZoomOutAfterEditing(){
+  if(!isIOSDevice())return;
+  if(iosZoomOutTimer){
+    clearTimeout(iosZoomOutTimer);
+    iosZoomOutTimer=0;
+  }
+  iosZoomOutTimer=setTimeout(()=>{
+    forceIOSZoomOut();
+    setTimeout(forceIOSZoomOut,220);
+  },90);
 }
 
 function isIOSDevice(){
@@ -459,7 +482,7 @@ function setupIOSNumericCaretFix(){
     if(!(target instanceof HTMLInputElement||target instanceof HTMLTextAreaElement))return;
     if(target.readOnly)return;
     if(target instanceof HTMLInputElement)sanitizeNumericInputField(target);
-    setTimeout(forceIOSZoomOut,0);
+    scheduleIOSZoomOutAfterEditing();
   });
 }
 
