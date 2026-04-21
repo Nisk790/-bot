@@ -22,15 +22,18 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
 .field:last-child{border-bottom:none}
 .field label{font-size:13px;color:#1c1c1e;min-width:0;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25;word-break:normal;overflow-wrap:anywhere}
 .field input[type=number],.field input[type=text]{text-align:right;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#f7f8fb;width:118px;max-width:55%;padding:4px 8px;min-height:28px;flex:0 0 auto;border-radius:8px;justify-self:end;font-variant-numeric:tabular-nums}
+.field #reportDate{width:160px;max-width:72%}
 .field input[readonly]{background:#eceff5;color:#616671}
 .field input::placeholder{color:#c7c7cc}
 .ios .field input.ios-num,.ios .num-field input.ios-num{text-align:right !important}
 .field-value{font-size:14px;color:#6c6c70;min-width:66px;text-align:right;flex:0 0 auto;justify-self:end;font-variant-numeric:tabular-nums}
 .top-card.sales .field{grid-template-columns:minmax(0,1fr) 98px}
 .top-card.sales .field input[type=number],.top-card.sales .field input.ios-num{width:98px;max-width:98px}
-.top-card.register .field{grid-template-columns:minmax(0,1fr) 98px}
-.top-card.register .field input[type=number],.top-card.register .field input.ios-num{width:98px;max-width:98px}
-.top-card.register .field .field-value{display:inline-flex;align-items:center;justify-content:flex-end;width:98px;min-width:98px;min-height:28px;padding:4px 8px;border:1px solid #d8dde8;border-radius:8px;background:#f7f8fb;color:#616671}
+.top-card.register .field{grid-template-columns:minmax(0,1fr) 46px}
+.top-card.register .field input[type=number],.top-card.register .field input.ios-num,.top-card.register .field select.target-select,.top-card.register .field .field-value{width:46px;max-width:46px;min-width:46px;height:28px;min-height:28px;box-sizing:border-box;justify-self:end;text-align:right;font-size:14px;font-variant-numeric:tabular-nums}
+.top-card.register .field input[type=number],.top-card.register .field input.ios-num{padding:0 6px;line-height:26px}
+.top-card.register .field select.target-select{padding:0 6px;line-height:26px;border:1px solid #d8dde8;border-radius:8px;background:#f7f8fb;color:#1c1c1e;text-align-last:right;-webkit-appearance:none;appearance:none;background-image:none}
+.top-card.register .field .field-value{display:inline-flex;align-items:center;justify-content:flex-end;padding:0 6px;border:1px solid #d8dde8;border-radius:8px;background:#f7f8fb;color:#616671;line-height:26px}
 .top-card.vacancy .field{grid-template-columns:minmax(0,1fr) 46px}
 .top-card.vacancy .field input[type=number],.top-card.vacancy .field input.ios-num{width:46px;max-width:46px}
 .top-card.visitor .field input[type=number],.top-card.visitor .field input.ios-num{width:46px;max-width:46px}
@@ -79,7 +82,7 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
 .loading-overlay.hidden{opacity:0;pointer-events:none}
 .loading-panel{background:rgba(255,255,255,.92);border:1px solid rgba(0,0,0,.06);border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:10px;color:#1c1c1e;font-size:16px;font-weight:700}
 .loading-panel .spin-arrow{font-size:20px}
-.field input[type=number]:focus,.field input[type=text]:focus,.prop-name:focus,.num-field input:focus{border-color:#4e8df7;box-shadow:0 0 0 2px rgba(78,141,247,.18)}
+.field input[type=number]:focus,.field input[type=text]:focus,.field select:focus,.prop-name:focus,.num-field input:focus{border-color:#4e8df7;box-shadow:0 0 0 2px rgba(78,141,247,.18)}
 
 @media(max-width:360px){
   .field{padding:5px 8px;grid-template-columns:minmax(0,1fr) auto}
@@ -99,7 +102,8 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
   .prop-name{background:#2a2d34;border-color:#4a4f5b}
   .top-card.register .field .field-value{background:#2a2d34;border-color:#4a4f5b;color:#bcc2cf}
   .num-field input{background:#1f2228;border-color:#4a4f5b}
-  .field input[type=number]:focus,.field input[type=text]:focus,.prop-name:focus,.num-field input:focus{border-color:#7ab2ff;box-shadow:0 0 0 2px rgba(122,178,255,.2)}
+  .top-card.register .field select.target-select{background:#2a2d34;border-color:#4a4f5b;color:#fff}
+  .field input[type=number]:focus,.field input[type=text]:focus,.field select:focus,.prop-name:focus,.num-field input:focus{border-color:#7ab2ff;box-shadow:0 0 0 2px rgba(122,178,255,.2)}
   .field-value{color:#ebebf5}
   .num-field{background:#2c2c2e}
   .tag{background:#2c2c2e;border-color:#48484a;color:#8e8e93}
@@ -150,9 +154,9 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
 
       <div class="top-card register">
         <div class="sec-title">物件登録件数</div>
-        <div class="field"><label>at home 目標</label><span class="field-value">40件</span></div>
+        <div class="field"><label>at home 目標</label><select id="ah1" class="target-select"><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="40" selected>40</option><option value="50">50</option></select></div>
         <div class="field"><label>at home 実績</label><input type="number" id="ah2" placeholder="39" inputmode="numeric"></div>
-        <div class="field"><label>SUUMO 目標</label><span class="field-value">10件</span></div>
+        <div class="field"><label>SUUMO 目標</label><select id="su1" class="target-select"><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select></div>
         <div class="field"><label>SUUMO 実績</label><input type="number" id="su2" placeholder="10" inputmode="numeric"></div>
         <div class="field"><label>ホームページ</label><input type="number" id="hp" placeholder="44" inputmode="numeric"></div>
       </div>
@@ -200,22 +204,24 @@ let pid=0;
 let isGenerating=false;
 const statusLabels=['通常','賃料査定中','ネット掲載準備中'];
 const storageKey='daily_report_last_values_v1';
-const fixedTargets={atHome:'40',suumo:'10'};
+const seedVersion='2026-04-21';
 const fieldDefaults={
   staff:'工藤',
   target:'500000',
-  actual:'85000',
-  forecast:'505455',
-  contracts:'0',
+  actual:'518000',
+  forecast:'580000',
+  contracts:'2',
   ad:'0',
   v1:'0',
-  v2:'0',
+  v2:'1',
   v3:'0',
   v4:'0',
-  ah2:'39',
-  su2:'10',
-  hp:'44',
-  r1:'6',
+  ah1:'40',
+  ah2:'32',
+  su1:'10',
+  su2:'8',
+  hp:'35',
+  r1:'8',
   r2:'0',
   r3:'3',
   r4:'0'
@@ -223,16 +229,18 @@ const fieldDefaults={
 const persistedFieldIds=[
   'staff','target','actual','forecast','contracts','ad',
   'v1','v2','v3','v4',
-  'ah2','su2','hp',
+  'ah1','ah2','su1','su2','hp',
   'r1','r2','r3','r4'
 ];
 const initProps=[
-  ['La Stage West 中野 401','通常',8,0],
-  ['ファランドール 103','通常',4,0],
+  ['La Stage West 中野 401','通常',8,1],
+  ['ファランドール 103','通常',5,1],
   ['BARN OWL 102','通常',4,1],
-  ['ヒルズガレージ105','賃料査定中',0,0],
+  ['ヒルズガレージ 105','賃料査定中',0,0],
   ['ヴィラーヌ高崎','通常',8,0],
-  ['カーサロッソ202','ネット掲載準備中',0,0]
+  ['カーサロッソ 202','ネット掲載準備中',0,0],
+  ['エンドレス大成Ⅰ 103','賃料査定中',0,0],
+  ['カーサピッコラ 402','通常',1,0]
 ];
 
 function getEl(id){return document.getElementById(id);}
@@ -243,9 +251,45 @@ function getVal(id,usePlaceholder){
   if(usePlaceholder&&typeof el.placeholder==='string'&&el.placeholder!=='')return el.placeholder;
   return '';
 }
+
+function normalizeNumericText(value){
+  const digits=String(value===undefined||value===null?'':value).replace(/[^0-9]/g,'');
+  if(digits==='')return '';
+  return digits.replace(/^0+(?=\d)/,'');
+}
+
+function isNumericLikeInput(input){
+  if(!(input instanceof HTMLInputElement))return false;
+  if(input.readOnly)return false;
+  if(input.type==='number')return true;
+  if(input.classList.contains('ios-num'))return true;
+  return input.getAttribute('inputmode')==='numeric';
+}
+
+function sanitizeNumericInputField(input){
+  if(!isNumericLikeInput(input))return;
+  const before=input.value||'';
+  const selStart=typeof input.selectionStart==='number'?input.selectionStart:before.length;
+  const selEnd=typeof input.selectionEnd==='number'?input.selectionEnd:before.length;
+  const leftRaw=before.slice(0,selStart);
+  const normalized=normalizeNumericText(before);
+  if(normalized===before)return;
+  input.value=normalized;
+  const leftNormalized=normalizeNumericText(leftRaw);
+  const nextPos=Math.min(leftNormalized.length,normalized.length);
+  try{
+    if(document.activeElement===input){
+      input.setSelectionRange(nextPos,nextPos);
+      return;
+    }
+    const atEnd=selStart===before.length&&selEnd===before.length;
+    if(atEnd)moveCaretToEnd(input);
+  }catch(_e){}
+}
+
 function gv(id){
-  const v=getVal(id,true);
-  return v===''?'0':v;
+  const normalized=normalizeNumericText(getVal(id,true));
+  return normalized===''?'0':normalized;
 }
 function yen(n){return parseInt(n||0,10).toLocaleString('ja-JP')+'円';}
 
@@ -253,9 +297,25 @@ function formatDateWithDow(d){
   const days=['日','月','火','水','木','金','土'];
   return `${d.getMonth()+1}/${d.getDate()}（${days[d.getDay()]}）`;
 }
+function formatFullDateWithDow(d){
+  const days=['日','月','火','水','木','金','土'];
+  return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}（${days[d.getDay()]}）`;
+}
 function syncToday(){
   const el=getEl('reportDate');
-  if(el)el.value=formatDateWithDow(new Date());
+  if(el)el.value=formatFullDateWithDow(new Date());
+}
+
+function forceIOSZoomOut(){
+  const viewport=document.querySelector('meta[name="viewport"]');
+  if(!viewport)return;
+  const fallback='width=device-width, initial-scale=1.0, viewport-fit=cover';
+  const original=viewport.getAttribute('content')||fallback;
+  if(!viewport.dataset.defaultViewport)viewport.dataset.defaultViewport=original;
+  viewport.setAttribute('content','width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover');
+  setTimeout(()=>{
+    viewport.setAttribute('content',viewport.dataset.defaultViewport||fallback);
+  },140);
 }
 
 function isIOSDevice(){
@@ -333,6 +393,34 @@ function moveCaretToEnd(el){
   }catch(_e){}
 }
 
+function selectAllInputValue(el){
+  if(!(el instanceof HTMLInputElement||el instanceof HTMLTextAreaElement))return;
+  if(el.readOnly||el.disabled)return;
+  if((el.value||'').length===0)return;
+  try{
+    if(typeof el.select==='function'){
+      el.select();
+      return;
+    }
+    const len=el.value.length;
+    el.setSelectionRange(0,len);
+  }catch(_e){}
+}
+
+function keepIOSCaretAtEndIfNeeded(input){
+  if(!isIOSDevice())return;
+  if(!(input instanceof HTMLInputElement))return;
+  if(!input.classList.contains('ios-num'))return;
+  if(document.activeElement!==input)return;
+  try{
+    const pos=typeof input.selectionStart==='number'?input.selectionStart:0;
+    const end=typeof input.selectionEnd==='number'?input.selectionEnd:0;
+    if(input.value.length>0&&pos===0&&end===0){
+      setTimeout(()=>selectAllInputValue(input),0);
+    }
+  }catch(_e){}
+}
+
 function normalizeIOSNumericInputs(root){
   if(!isIOSDevice())return;
   const scope=root||document;
@@ -352,19 +440,58 @@ function setupIOSNumericCaretFix(){
     const target=e.target;
     if(!(target instanceof HTMLInputElement))return;
     if(!target.classList.contains('ios-num'))return;
-    setTimeout(()=>moveCaretToEnd(target),0);
+    setTimeout(()=>selectAllInputValue(target),0);
   });
   document.addEventListener('input',e=>{
     const target=e.target;
     if(!(target instanceof HTMLInputElement))return;
-    if(!target.classList.contains('ios-num'))return;
-    const next=target.value.replace(/[^0-9]/g,'');
-    if(next!==target.value)target.value=next;
+    keepIOSCaretAtEndIfNeeded(target);
   });
+  document.addEventListener('touchend',e=>{
+    const target=e.target;
+    if(!(target instanceof Element))return;
+    const input=target.closest('input.ios-num');
+    if(!(input instanceof HTMLInputElement))return;
+    keepIOSCaretAtEndIfNeeded(input);
+  },{passive:true});
+  document.addEventListener('focusout',e=>{
+    const target=e.target;
+    if(!(target instanceof HTMLInputElement||target instanceof HTMLTextAreaElement))return;
+    if(target.readOnly)return;
+    if(target instanceof HTMLInputElement)sanitizeNumericInputField(target);
+    setTimeout(forceIOSZoomOut,0);
+  });
+}
+
+function setupFocusSelectForEditableInputs(){
+  document.addEventListener('focusin',e=>{
+    const target=e.target;
+    if(!(target instanceof HTMLInputElement||target instanceof HTMLTextAreaElement))return;
+    if(target.readOnly||target.disabled)return;
+    if(target.classList.contains('ios-num'))return;
+    setTimeout(()=>selectAllInputValue(target),0);
+  });
+}
+
+function setupNumericInputSanitizer(){
+  document.addEventListener('input',e=>{
+    const target=e.target;
+    if(!(target instanceof HTMLInputElement))return;
+    sanitizeNumericInputField(target);
+  });
+  document.addEventListener('blur',e=>{
+    const target=e.target;
+    if(!(target instanceof HTMLInputElement))return;
+    sanitizeNumericInputField(target);
+  },true);
 }
 
 function addProp(name='',status='通常',h=0,s=0,focusAfterAdd=false){
   const id=pid++;
+  const safeH=normalizeNumericText(h);
+  const safeS=normalizeNumericText(s);
+  const initialH=safeH===''?'0':safeH;
+  const initialS=safeS===''?'0':safeS;
   const div=document.createElement('div');
   div.className='prop-block';
   div.id='pb'+id;
@@ -374,8 +501,8 @@ function addProp(name='',status='通常',h=0,s=0,focusAfterAdd=false){
 <input class="prop-name" id="pn${id}" type="text" placeholder="物件名・部屋番号" value="${name}" inputmode="text">
 <div class="tags" id="sr${id}">${tagsHtml}</div>
 <div class="nums-row">
-  <div class="num-field"><label>🈳 反響</label><input type="number" id="ph${id}" value="${h}" inputmode="numeric"></div>
-  <div class="num-field"><label>🈸 反響</label><input type="number" id="ps${id}" value="${s}" inputmode="numeric"></div>
+  <div class="num-field"><label>🈳 反響</label><input type="number" id="ph${id}" value="${initialH}" inputmode="numeric"></div>
+  <div class="num-field"><label>🈸 反響</label><input type="number" id="ps${id}" value="${initialS}" inputmode="numeric"></div>
 </div>`;
   getEl('propList').appendChild(div);
   normalizeIOSNumericInputs(div);
@@ -432,7 +559,9 @@ function loadLastSnapshot(){
     const raw=localStorage.getItem(storageKey);
     if(!raw)return null;
     const data=JSON.parse(raw);
-    return data&&typeof data==='object'?data:null;
+    if(!data||typeof data!=='object')return null;
+    if(data.seedVersion!==seedVersion)return null;
+    return data;
   }catch(_e){
     return null;
   }
@@ -445,7 +574,11 @@ function applyInitialFieldValues(snapshot){
     const hasSaved=snapshot&&snapshot.fields&&snapshot.fields[id]!==undefined&&snapshot.fields[id]!==null;
     const saved=hasSaved?String(snapshot.fields[id]):'';
     const hasDefault=fieldDefaults[id]!==undefined&&fieldDefaults[id]!==null;
-    const initial=saved!==''?saved:(hasDefault?String(fieldDefaults[id]):'');
+    let initial=saved!==''?saved:(hasDefault?String(fieldDefaults[id]):'');
+    if(id!=='staff'){
+      const normalized=normalizeNumericText(initial);
+      initial=normalized===''?'0':normalized;
+    }
     el.value=initial;
   });
 }
@@ -468,9 +601,13 @@ function saveLastSnapshot(){
   try{
     const fields={};
     persistedFieldIds.forEach(id=>{
-      fields[id]=getVal(id,false);
+      if(id==='staff'){
+        fields[id]=getVal(id,false)||fieldDefaults.staff;
+        return;
+      }
+      fields[id]=gv(id);
     });
-    const data={fields,props:getPropsSnapshot()};
+    const data={seedVersion,fields,props:getPropsSnapshot()};
     localStorage.setItem(storageKey,JSON.stringify(data));
   }catch(_e){}
 }
@@ -539,8 +676,8 @@ function generate(){
   lines.push(`その他　　${gv('v4')}件`);
   lines.push('');
   lines.push('◉物件登録件数');
-  lines.push(`at home ${fixedTargets.atHome}件     ${gv('ah2')}件`);
-  lines.push(`SUUMO  ${fixedTargets.suumo}件     ${gv('su2')}件`);
+  lines.push(`at home ${gv('ah1')}件     ${gv('ah2')}件`);
+  lines.push(`SUUMO  ${gv('su1')}件     ${gv('su2')}件`);
   lines.push(`ホームページ        ${gv('hp')}件`);
   lines.push('');
   lines.push('◉賃貸空室');
@@ -606,14 +743,18 @@ function showOk(btn){
 const lastSnapshot=loadLastSnapshot();
 applyInitialFieldValues(lastSnapshot);
 setupIOSNumericCaretFix();
+setupFocusSelectForEditableInputs();
+setupNumericInputSanitizer();
 setupIOSButtonHaptics();
 if(lastSnapshot&&Array.isArray(lastSnapshot.props)&&lastSnapshot.props.length){
   lastSnapshot.props.forEach(p=>{
     const name=typeof p.name==='string'?p.name:'';
     const status=statusLabels.includes(p.status)?p.status:'通常';
-    const h=String(p&&p.h!==undefined&&p.h!==null?p.h:'0');
-    const s=String(p&&p.s!==undefined&&p.s!==null?p.s:'0');
-    addProp(name,status,h,s);
+    const hRaw=String(p&&p.h!==undefined&&p.h!==null?p.h:'0');
+    const sRaw=String(p&&p.s!==undefined&&p.s!==null?p.s:'0');
+    const h=normalizeNumericText(hRaw);
+    const s=normalizeNumericText(sRaw);
+    addProp(name,status,h===''?'0':h,s===''?'0':s);
   });
 }else{
   initProps.forEach(p=>addProp(p[0],p[1],p[2],p[3]));
