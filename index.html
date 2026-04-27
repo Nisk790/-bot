@@ -6,118 +6,121 @@
 <title>日報作成ツール</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{--safe-bottom:env(safe-area-inset-bottom);--action-h:116px}
-body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;background:#f2f2f7;color:#1c1c1e;font-size:16px;padding-bottom:calc(var(--action-h) + var(--safe-bottom))}
+:root{--safe-bottom:env(safe-area-inset-bottom);--action-h:116px;--bg:#171615;--bg-soft:#1d1b19;--card:#24211f;--card-2:#2b2825;--input:#302c28;--input-strong:#38332e;--text:#f3eee7;--text-soft:#d7cec4;--text-muted:#9a9086;--text-dim:#756d65;--border:rgba(255,255,255,.08);--border-strong:rgba(255,255,255,.14);--accent:#d88a3d;--accent-strong:#f0a24a;--accent-soft:rgba(216,138,61,.16);--danger:#ff6b5f;--success:#54c878;--shadow:rgba(0,0,0,.28)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;background:radial-gradient(circle at 20% -10%,rgba(216,138,61,.1),transparent 28%),linear-gradient(180deg,var(--bg-soft),var(--bg));color:var(--text);font-size:16px;padding-bottom:calc(var(--action-h) + var(--safe-bottom))}
 
 .screen{display:none}
 .screen.active{display:block}
 
-h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:#1c1c1e}
+h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:var(--text);letter-spacing:.01em}
+.quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 8px}
+.mini-btn{min-height:34px;border:1px solid var(--border-strong);border-radius:8px;background:var(--card);color:var(--accent-strong);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 12px rgba(0,0,0,.2)}
+.mini-btn:active{filter:brightness(1.08)}
 .top-pane{min-height:calc(100svh - var(--action-h) - var(--safe-bottom));display:flex;flex-direction:column;overflow:hidden}
 .top-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 8px;align-content:start}
-.top-card{background:#fff;border-radius:12px;overflow:hidden}
+.top-card{background:linear-gradient(180deg,var(--card),#211e1c);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 24px var(--shadow);overflow:hidden}
 .top-card.wide{grid-column:1/-1}
-.sec-title{font-size:11px;font-weight:700;color:#6c6c70;letter-spacing:.04em;padding:8px 10px 4px;text-transform:uppercase}
-.field{padding:6px 10px;border-bottom:.5px solid #e5e5ea;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:8px;min-height:30px}
+
+.sec-title{font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.04em;padding:8px 10px 4px;text-transform:uppercase}
+.sec-title .count{font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:0;text-transform:none}
+.sec-title.has-step{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.step-size-row{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:0;text-transform:none;white-space:nowrap}
+.step-size-select{width:44px;min-height:22px;border:1px solid var(--border-strong);border-radius:7px;background:var(--input);color:var(--accent-strong);font-size:12px;font-weight:800;text-align:center;text-align-last:center;padding:1px 4px;outline:none}
+
+.field{padding:6px 10px;border-bottom:.5px solid var(--border);display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:8px;min-height:30px}
 .field:last-child{border-bottom:none}
-.field label{font-size:13px;color:#1c1c1e;min-width:0;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25;word-break:normal;overflow-wrap:anywhere}
-.field input[type=number],.field input[type=text]{text-align:right;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#f7f8fb;width:118px;max-width:55%;padding:4px 8px;min-height:28px;flex:0 0 auto;border-radius:8px;justify-self:end;font-variant-numeric:tabular-nums}
+.field label{font-size:13px;color:var(--text-soft);min-width:0;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25;word-break:normal;overflow-wrap:anywhere}
+.field input[type=number],.field input[type=text],.field select{text-align:right;border:1px solid var(--border-strong);outline:none;font-size:14px;color:var(--text);background:var(--input);width:118px;max-width:55%;padding:4px 8px;min-height:28px;flex:0 0 auto;border-radius:8px;justify-self:end;font-variant-numeric:tabular-nums;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.field select{text-align-last:right}
 .field.field-date{grid-template-columns:minmax(0,1fr) auto}
 .field.field-date #reportDate{width:146px;max-width:68vw;text-align:center;font-size:13px;padding:4px 6px}
-.field input[readonly]{background:#eceff5;color:#616671}
-.field input::placeholder{color:#c7c7cc}
-.ios .field input.ios-num,.ios .num-field input.ios-num{text-align:right !important}
-.ios .field input[type=number],.ios .field input[type=text],.ios .field select,.ios .prop-name,.ios .num-field input{font-size:16px !important}
-.ios .field.field-date #reportDate{font-size:13px !important}
-.field-value{font-size:14px;color:#6c6c70;min-width:66px;text-align:right;flex:0 0 auto;justify-self:end;font-variant-numeric:tabular-nums}
+.field input[readonly]{background:var(--card-2);color:var(--text-muted)}
+.field input::placeholder,.prop-name::placeholder{color:var(--text-dim)}
+.field input[type=number]:focus,.field input[type=text]:focus,.field select:focus,.prop-name:focus,.num-field input:focus{border-color:var(--accent-strong);box-shadow:0 0 0 2px var(--accent-soft),inset 0 1px 0 rgba(255,255,255,.04)}
+.field-value{font-size:14px;color:var(--text-soft);min-width:66px;text-align:right;flex:0 0 auto;justify-self:end;font-variant-numeric:tabular-nums}
+
 .top-card.sales .field{grid-template-columns:minmax(0,1fr) 98px}
 .top-card.sales .field input[type=number],.top-card.sales .field input.ios-num{width:98px;max-width:98px}
-.top-card.register .field{grid-template-columns:minmax(0,1fr) 46px}
+.top-card.sales .field label,.top-card.register .field label,.top-card.visitor .field label{font-size:12px}
+.top-card.register{align-self:start}
+.top-card.register .sec-title{padding-bottom:6px}
+.top-card.register .field{grid-template-columns:minmax(0,1fr) 46px;min-height:36px;padding-top:7px;padding-bottom:7px}
 .top-card.register .field input[type=number],.top-card.register .field input.ios-num,.top-card.register .field select.target-select,.top-card.register .field .field-value{width:46px;max-width:46px;min-width:46px;height:28px;min-height:28px;box-sizing:border-box;justify-self:end;text-align:right;font-size:14px;font-variant-numeric:tabular-nums}
 .top-card.register .field input[type=number],.top-card.register .field input.ios-num{padding:0 6px;line-height:26px}
-.top-card.register .field select.target-select{padding:0 6px;line-height:26px;border:1px solid #d8dde8;border-radius:8px;background:#f7f8fb;color:#1c1c1e;text-align-last:right;-webkit-appearance:none;appearance:none;background-image:none}
-.top-card.register .field .field-value{display:inline-flex;align-items:center;justify-content:flex-end;padding:0 6px;border:1px solid #d8dde8;border-radius:8px;background:#f7f8fb;color:#616671;line-height:26px}
+.top-card.register .field select.target-select{padding:0 6px;line-height:26px;border:1px solid var(--border-strong);border-radius:8px;background:var(--input);color:var(--accent-strong);text-align-last:right;-webkit-appearance:none;appearance:none;background-image:none}
+.top-card.register .field .field-value{display:inline-flex;align-items:center;justify-content:flex-end;padding:0 6px;border:1px solid var(--border-strong);border-radius:8px;background:var(--input);color:var(--text-soft);line-height:26px}
 .top-card.vacancy .field{grid-template-columns:minmax(0,1fr) 46px}
-.top-card.vacancy .field input[type=number],.top-card.vacancy .field input.ios-num{width:46px;max-width:46px}
-.top-card.visitor .field input[type=number],.top-card.visitor .field input.ios-num{width:46px;max-width:46px}
-.top-card.visitor .field label{font-size:12px}
-.top-card.sales .field label,.top-card.register .field label{font-size:12px}
+.top-card.vacancy .field input[type=number],.top-card.vacancy .field input.ios-num,.top-card.visitor .field input[type=number],.top-card.visitor .field input.ios-num{width:46px;max-width:46px}
 
-.section{background:#fff;border-radius:12px;margin:0 12px 10px;overflow:hidden}
-.prop-block{padding:10px 12px;border-bottom:.5px solid #e5e5ea;max-height:420px;overflow:hidden;transform-origin:top center;transition:max-height .34s cubic-bezier(.22,.61,.36,1),padding .28s ease,margin .28s ease,opacity .24s ease,transform .24s ease,border-color .2s ease}
+.field.compact-field{grid-template-columns:minmax(0,1fr) auto;column-gap:6px;min-height:34px;padding-top:5px;padding-bottom:5px}
+.compact-stepper{display:grid;grid-template-columns:28px 44px 28px;gap:4px;align-items:center;justify-self:end;width:108px}
+.compact-stepper input[type=number],.compact-stepper input.ios-num{width:44px!important;max-width:44px!important;min-width:44px!important;height:28px;min-height:28px;text-align:center;padding:0 4px;line-height:26px}
+.compact-stepper-btn,.stepper-btn{background:var(--input-strong);border:1px solid var(--border-strong);color:var(--accent-strong);box-shadow:0 4px 10px rgba(0,0,0,.22)}
+.compact-stepper-btn{width:28px;height:28px;border-radius:8px;font-size:18px;font-weight:900;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.compact-stepper-btn.minus{color:var(--text-muted)}
+.compact-stepper-btn.plus{background:linear-gradient(180deg,rgba(216,138,61,.22),rgba(216,138,61,.12));border-color:rgba(216,138,61,.34);color:var(--accent-strong)}
+
+.section{background:linear-gradient(180deg,var(--card),#211e1c);border:1px solid var(--border);border-radius:16px;margin:0 12px 10px;overflow:hidden;box-shadow:0 10px 24px var(--shadow)}
+.prop-block{padding:10px 12px;border-bottom:.5px solid var(--border);max-height:420px;overflow:hidden;transform-origin:top center;transition:max-height .34s cubic-bezier(.22,.61,.36,1),padding .28s ease,margin .28s ease,opacity .24s ease,transform .24s ease,border-color .2s ease}
 .prop-block:last-child{border-bottom:none}
 .prop-block.is-removing{opacity:0;transform:translateY(-6px);padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0;border-bottom-color:transparent;pointer-events:none}
-.prop-name{width:100%;border:1px solid #d8dde8;outline:none;font-size:14px;font-weight:500;color:#1c1c1e;background:#f7f8fb;margin-bottom:8px;border-radius:8px;padding:7px 9px}
-.prop-name::placeholder{color:#c7c7cc}
+.prop-name{width:100%;border:1px solid var(--border-strong);outline:none;font-size:14px;font-weight:500;color:var(--text-soft);background:var(--input);margin-bottom:8px;border-radius:8px;padding:7px 9px;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-.tag{font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid #c7c7cc;background:#f2f2f7;color:#6c6c70;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;user-select:none;transition:transform .06s ease,filter .06s ease,box-shadow .08s ease;box-shadow:0 3px 7px rgba(0,0,0,.14)}
+.tag{font-size:12px;padding:4px 10px;border-radius:20px;border:1px solid var(--border-strong);background:var(--input);color:var(--text-muted);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;user-select:none;transition:transform .06s ease,filter .06s ease,box-shadow .08s ease;box-shadow:0 4px 10px rgba(0,0,0,.18)}
 .tag:active{transform:translateY(2px) scale(.93);filter:brightness(.85) saturate(1.08);box-shadow:inset 0 2px 6px rgba(0,0,0,.25),0 1px 1px rgba(0,0,0,.15)}
-.tag.on{background:#007aff;color:#fff;border-color:#007aff;box-shadow:0 3px 9px rgba(0,122,255,.35)}
+.tag.on{background:linear-gradient(180deg,var(--accent-strong),var(--accent));border-color:rgba(240,162,74,.65);color:#24160b;box-shadow:0 5px 14px rgba(216,138,61,.28)}
 .nums-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.num-field{background:#f2f2f7;border-radius:8px;padding:8px 10px}
-.num-field label{font-size:11px;color:#6c6c70;display:block;margin-bottom:3px}
-.num-field input{width:100%;border:1px solid #d8dde8;outline:none;font-size:14px;color:#1c1c1e;background:#fff;border-radius:8px;padding:5px 8px;min-height:28px;text-align:right;font-variant-numeric:tabular-nums}
+.num-field{background:var(--card-2);border-radius:8px;padding:8px 10px}
+.num-field label{font-size:11px;color:var(--text-muted);display:block;margin-bottom:3px}
+.num-field input{width:100%;border:1px solid var(--border-strong);outline:none;font-size:14px;color:var(--text);background:var(--input);border-radius:8px;padding:5px 8px;min-height:28px;text-align:right;font-variant-numeric:tabular-nums;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.stepper{display:grid;grid-template-columns:30px minmax(34px,1fr) 30px;gap:5px;align-items:center}
+.stepper-btn{height:30px;border-radius:8px;font-size:20px;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.stepper input{width:100%;min-width:0;text-align:center;padding:0 4px;pointer-events:none;background:var(--input);color:var(--text);font-size:16px;font-weight:700;border-color:var(--border-strong)}
 .del-row{display:flex;justify-content:flex-end;margin-bottom:4px}
-.del-btn{font-size:13px;color:#ff3b30;background:none;border:none;padding:0;cursor:pointer}
+.del-btn{font-size:13px;color:var(--danger);background:none;border:none;padding:0;cursor:pointer}
 
-.action-bar{position:fixed;left:0;right:0;bottom:0;padding:10px 12px calc(10px + var(--safe-bottom));background:linear-gradient(to top,rgba(242,242,247,.98),rgba(242,242,247,.9) 72%,rgba(242,242,247,0));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.action-bar{position:fixed;left:0;right:0;bottom:0;padding:10px 12px calc(10px + var(--safe-bottom));background:linear-gradient(to top,rgba(23,22,21,.98),rgba(23,22,21,.9) 72%,rgba(23,22,21,0));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
 .add-btn,.gen-btn,.copy-btn{width:100%;border-radius:12px;cursor:pointer;display:block}
-.add-btn{padding:12px;font-size:15px;min-height:46px;border:1.5px dashed #007aff;background:#fff;color:#007aff}
-.gen-btn{margin-top:8px;padding:13px;font-size:16px;min-height:48px;font-weight:700;background:#007aff;color:#fff;border:none}
-.gen-btn:disabled{opacity:.92}
+.add-btn{padding:12px;font-size:15px;min-height:46px;border:1.5px dashed var(--accent);background:var(--card);color:var(--accent-strong);box-shadow:0 8px 18px rgba(0,0,0,.24)}
+.gen-btn{margin-top:8px;padding:13px;font-size:16px;min-height:48px;font-weight:700;background:linear-gradient(180deg,var(--accent-strong),var(--accent));color:#24160b;border:none;box-shadow:0 10px 20px rgba(216,138,61,.22)}
+.gen-btn:disabled{opacity:.9}
 .add-btn,.gen-btn,.copy-btn{box-shadow:0 6px 14px rgba(0,0,0,.18)}
 button{transition:transform .06s ease,filter .06s ease,box-shadow .08s ease;box-shadow:0 4px 10px rgba(0,0,0,.14)}
 button:active{transform:translateY(3px) scale(.94);filter:brightness(.86) saturate(1.08);box-shadow:inset 0 2px 8px rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.2)}
-button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
+button:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
 .spin-arrow{display:inline-block;font-size:18px;line-height:1;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 .report-head{display:flex;align-items:center;gap:8px;padding:10px 12px 4px}
-.back-btn{display:inline-flex;align-items:center;gap:6px;border:none;background:none;color:#007aff;font-size:17px;font-weight:600;cursor:pointer;padding:4px 0}
+.back-btn{display:inline-flex;align-items:center;gap:6px;border:none;background:none;color:var(--accent-strong);font-size:17px;font-weight:600;cursor:pointer;padding:4px 0}
 .back-btn .arrow{font-size:20px;line-height:1}
-.report-title{font-size:18px;font-weight:700;color:#1c1c1e}
+.report-title{font-size:18px;font-weight:700;color:var(--text);letter-spacing:.01em}
 .out-wrap{margin:8px 12px 20px}
-.out-box{background:#fff;border-radius:12px;padding:14px 14px;white-space:pre-wrap;font-size:14px;line-height:1.45;color:#1c1c1e;word-break:normal;overflow-wrap:anywhere;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',monospace}
-.copy-btn{margin-top:10px;padding:13px;font-size:16px;min-height:48px;font-weight:600;background:#fff;color:#007aff;border:1px solid #007aff}
-.copy-btn.ok{background:#34c759;border-color:#34c759;color:#fff}
+.out-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 14px;white-space:pre-wrap;font-size:14px;line-height:1.45;color:var(--text);word-break:normal;overflow-wrap:anywhere;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',monospace;box-shadow:0 10px 24px var(--shadow)}
+.copy-btn{margin-top:10px;padding:13px;font-size:16px;min-height:48px;font-weight:600;background:linear-gradient(180deg,var(--card),#211e1c);color:var(--accent-strong);border:1px solid var(--border-strong);box-shadow:0 10px 24px var(--shadow)}
+.copy-btn.ok{background:var(--success);border-color:var(--success);color:#0e2115}
+.settings-actions{padding:10px 12px 20px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.settings-actions button{min-height:44px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 7px 16px rgba(0,0,0,.24)}
+.save-settings-btn{border:none;background:linear-gradient(180deg,var(--accent-strong),var(--accent));color:#24160b}
+.settings-back-btn{border:1px solid var(--border-strong);background:var(--card);color:var(--accent-strong)}
+.settings-back-btn:active{filter:brightness(1.08)}
+.toast{position:fixed;left:50%;bottom:calc(18px + var(--safe-bottom));transform:translateX(-50%) translateY(12px);max-width:calc(100% - 32px);padding:9px 14px;border-radius:999px;background:rgba(20,18,17,.96);color:var(--text);border:1px solid rgba(216,138,61,.25);font-size:13px;font-weight:700;z-index:10000;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;white-space:nowrap;box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-.loading-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(242,242,247,.42);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:9999;opacity:1;transition:opacity .15s ease}
+.loading-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(23,22,21,.54);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:9999;opacity:1;transition:opacity .15s ease}
 .loading-overlay.hidden{opacity:0;pointer-events:none}
-.loading-panel{background:rgba(255,255,255,.92);border:1px solid rgba(0,0,0,.06);border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:10px;color:#1c1c1e;font-size:16px;font-weight:700}
+.loading-panel{background:rgba(36,33,31,.96);border:1px solid var(--border-strong);border-radius:14px;padding:16px 22px;display:flex;align-items:center;gap:10px;color:var(--text);font-size:16px;font-weight:700;box-shadow:0 14px 34px rgba(0,0,0,.36)}
 .loading-panel .spin-arrow{font-size:20px}
-.field input[type=number]:focus,.field input[type=text]:focus,.field select:focus,.prop-name:focus,.num-field input:focus{border-color:#4e8df7;box-shadow:0 0 0 2px rgba(78,141,247,.18)}
+
+.ios .field input.ios-num,.ios .num-field input.ios-num{text-align:right !important}
+.ios .field input[type=number],.ios .field input[type=text],.ios .field select,.ios .prop-name,.ios .num-field input{font-size:16px !important}
+.ios .field.field-date #reportDate{font-size:13px !important}
+.ios .step-size-select{font-size:16px!important;width:48px}
 
 @media(max-width:360px){
   .field{padding:5px 8px;grid-template-columns:minmax(0,1fr) auto}
   .field label{font-size:12px}
   .field input[type=number],.field input[type=text]{font-size:13px;width:92px}
-}
-@media(prefers-color-scheme:dark){
-  body{background:#000;color:#fff}
-  h1,.report-title{color:#fff}
-  .top-card,.section,.out-box,.copy-btn{background:#1c1c1e}
-  .sec-title,.num-field label{color:#8e8e93}
-  .field{border-bottom-color:#38383a}
-  .field label,.prop-name{color:#fff}
-  .field input[type=number],.field input[type=text],.prop-name,.num-field input{color:#fff}
-  .field input[type=number],.field input[type=text]{background:#2a2d34;border-color:#4a4f5b}
-  .field input[readonly]{background:#26292f;color:#bcc2cf}
-  .prop-name{background:#2a2d34;border-color:#4a4f5b}
-  .top-card.register .field .field-value{background:#2a2d34;border-color:#4a4f5b;color:#bcc2cf}
-  .num-field input{background:#1f2228;border-color:#4a4f5b}
-  .top-card.register .field select.target-select{background:#2a2d34;border-color:#4a4f5b;color:#fff}
-  .field input[type=number]:focus,.field input[type=text]:focus,.field select:focus,.prop-name:focus,.num-field input:focus{border-color:#7ab2ff;box-shadow:0 0 0 2px rgba(122,178,255,.2)}
-  .field-value{color:#ebebf5}
-  .num-field{background:#2c2c2e}
-  .tag{background:#2c2c2e;border-color:#48484a;color:#8e8e93}
-  .prop-block{border-bottom-color:#38383a}
-  .action-bar{background:linear-gradient(to top,rgba(0,0,0,.98),rgba(0,0,0,.9) 72%,rgba(0,0,0,0))}
-  .add-btn{background:#1c1c1e;color:#0a84ff;border-color:#0a84ff}
-  .gen-btn{background:#0a84ff}
-  .back-btn,.copy-btn{color:#0a84ff;border-color:#0a84ff}
-  .out-box{color:#f2f2f7}
-  .loading-overlay{background:rgba(0,0,0,.36)}
-  .loading-panel{background:rgba(28,28,30,.94);border-color:rgba(255,255,255,.08);color:#f2f2f7}
 }
 </style>
 </head>
@@ -125,12 +128,16 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
 <div id="editorScreen" class="screen active">
   <div class="top-pane">
     <h1>日報作成</h1>
+    <div class="quick-actions">
+      <button type="button" class="mini-btn" id="openSettingsBtn">設定</button>
+      <button type="button" class="mini-btn" id="restoreSnapshotBtn">前回値を使用</button>
+    </div>
     <div class="top-grid">
       <div class="top-card wide">
         <div class="sec-title">基本情報</div>
         <div class="field">
           <label>担当者名</label>
-          <input type="text" id="staff" value="工藤" inputmode="text">
+          <input type="text" id="staff" inputmode="text">
         </div>
         <div class="field field-date">
           <label>作成日</label>
@@ -140,15 +147,15 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
 
       <div class="top-card sales">
         <div class="sec-title">賃貸 — 売上・実績</div>
-        <div class="field"><label>売上目標（円）</label><input type="number" id="target" placeholder="500000" inputmode="numeric"></div>
-        <div class="field"><label>当月実績（円）</label><input type="number" id="actual" placeholder="85000" inputmode="numeric"></div>
-        <div class="field"><label>当月見込み（円）</label><input type="number" id="forecast" placeholder="505455" inputmode="numeric"></div>
+        <div class="field"><label>売上目標（円）</label><input type="number" id="target" placeholder="0" inputmode="numeric"></div>
+        <div class="field"><label>当月実績（円）</label><input type="number" id="actual" placeholder="0" inputmode="numeric"></div>
+        <div class="field"><label>当月見込み（円）</label><input type="number" id="forecast" placeholder="0" inputmode="numeric"></div>
         <div class="field"><label>契約件数</label><input type="number" id="contracts" placeholder="0" inputmode="numeric"></div>
         <div class="field"><label>内AD件数</label><input type="number" id="ad" placeholder="0" inputmode="numeric"></div>
       </div>
 
       <div class="top-card visitor">
-        <div class="sec-title">来店客数（当日）</div>
+        <div class="sec-title has-step">来店客数（当日）<span class="step-size-row">増減幅 <select id="visitorStepSize" class="step-size-select" aria-label="来店客数の増減幅"><option value="1">1</option><option value="5">5</option><option value="10">10</option></select></span></div>
         <div class="field"><label>予約</label><input type="number" id="v1" placeholder="0" inputmode="numeric"></div>
         <div class="field"><label>飛込</label><input type="number" id="v2" placeholder="0" inputmode="numeric"></div>
         <div class="field"><label>再来店</label><input type="number" id="v3" placeholder="0" inputmode="numeric"></div>
@@ -156,19 +163,19 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
       </div>
 
       <div class="top-card register">
-        <div class="sec-title">物件登録件数</div>
-        <div class="field"><label>at home 目標</label><select id="ah1" class="target-select"><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="40" selected>40</option><option value="50">50</option></select></div>
-        <div class="field"><label>at home 実績</label><input type="number" id="ah2" placeholder="39" inputmode="numeric"></div>
-        <div class="field"><label>SUUMO 目標</label><select id="su1" class="target-select"><option value="10" selected>10</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select></div>
-        <div class="field"><label>SUUMO 実績</label><input type="number" id="su2" placeholder="10" inputmode="numeric"></div>
-        <div class="field"><label>ホームページ</label><input type="number" id="hp" placeholder="44" inputmode="numeric"></div>
+        <div class="sec-title has-step">物件登録件数<span class="step-size-row">増減幅 <select id="registerStepSize" class="step-size-select" aria-label="物件登録件数の増減幅"><option value="1">1</option><option value="5">5</option><option value="10">10</option></select></span></div>
+        <input type="hidden" id="ah1" value="40">
+        <div class="field"><label>at home 実績</label><input type="number" id="ah2" placeholder="0" inputmode="numeric"></div>
+        <input type="hidden" id="su1" value="10">
+        <div class="field"><label>SUUMO 実績</label><input type="number" id="su2" placeholder="0" inputmode="numeric"></div>
+        <input type="hidden" id="hp" value="">
       </div>
 
       <div class="top-card vacancy">
-        <div class="sec-title">賃貸空室</div>
-        <div class="field"><label>管理物件</label><input type="number" id="r1" placeholder="6" inputmode="numeric"></div>
+        <div class="sec-title has-step"><span>賃貸空室<span id="vacancyPropCount" class="count">（追加物件 0件）</span></span><span class="step-size-row">増減幅 <select id="vacancyStepSize" class="step-size-select" aria-label="賃貸空室の増減幅"><option value="1">1</option><option value="5">5</option><option value="10">10</option></select></span></div>
+        <div class="field"><label>管理物件</label><input type="number" id="r1" placeholder="0" inputmode="numeric"></div>
         <div class="field"><label>一般物件</label><input type="number" id="r2" placeholder="0" inputmode="numeric"></div>
-        <div class="field"><label>内空き予定</label><input type="number" id="r3" placeholder="3" inputmode="numeric"></div>
+        <div class="field"><label>内空き予定</label><input type="number" id="r3" placeholder="0" inputmode="numeric"></div>
         <div class="field"><label>内サブリース</label><input type="number" id="r4" placeholder="0" inputmode="numeric"></div>
       </div>
     </div>
@@ -180,20 +187,49 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
   </div>
 
   <div class="action-bar">
-    <button type="button" class="add-btn" onclick="addPropAndFocus()">＋ 物件を追加</button>
-    <button type="button" class="gen-btn" id="generateBtn" onclick="handleGenerate()">日報を生成する</button>
+    <button type="button" class="add-btn" id="addPropBtn">＋ 物件を追加</button>
+    <button type="button" class="gen-btn" id="generateBtn">日報を生成する</button>
+  </div>
+</div>
+
+<div id="settingsScreen" class="screen">
+  <h1>設定</h1>
+  <div class="section">
+    <div class="sec-title">固定設定</div>
+    <div class="field">
+      <label>担当者名</label>
+      <input type="text" id="settingsStaff" inputmode="text">
+    </div>
+    <div class="field">
+      <label>at home目標</label>
+      <select id="settingsAh1" class="target-select"><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select>
+    </div>
+    <div class="field">
+      <label>SUUMO目標</label>
+      <select id="settingsSu1" class="target-select"><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select>
+    </div>
+    <div class="field">
+      <label>ホームページ目標</label>
+      <select id="settingsHp" class="target-select"><option value="" selected></option><option value="10">10</option><option value="20">20</option><option value="30">30</option><option value="40">40</option><option value="50">50</option></select>
+    </div>
+  </div>
+  <div class="settings-actions">
+    <button type="button" class="save-settings-btn" id="saveSettingsBtn">設定を保存</button>
+    <button type="button" class="settings-back-btn" id="settingsBackBtn">戻る</button>
   </div>
 </div>
 
 <div id="reportScreen" class="screen">
   <div class="report-head">
-    <button type="button" class="back-btn" onclick="goBackToEditor()"><span class="arrow">←</span>戻る</button>
+    <button type="button" class="back-btn" id="backBtn"><span class="arrow">←</span>戻る</button>
   </div>
   <div class="out-wrap" id="outWrap">
     <div class="out-box" id="out"></div>
-    <button type="button" class="copy-btn" id="copyBtn" onclick="copyOut()">コピーする</button>
+    <button type="button" class="copy-btn" id="copyBtn">コピーする</button>
   </div>
 </div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <div id="loadingOverlay" class="loading-overlay hidden" aria-live="polite" aria-busy="true">
   <div class="loading-panel">
@@ -206,28 +242,29 @@ button:focus-visible{outline:2px solid #74aefc;outline-offset:2px}
 let pid=0;
 let isGenerating=false;
 const statusLabels=['通常','賃料査定中','ネット掲載準備中'];
-const storageKey='daily_report_last_values_v1';
-const seedVersion='2026-04-21';
+const snapshotStorageKey='daily_report_last_values_v3';
+const settingsStorageKey='daily_report_settings_v1';
+const metaStorageKey='daily_report_meta_v1';
 const fieldDefaults={
-  staff:'工藤',
-  target:'500000',
-  actual:'518000',
-  forecast:'580000',
-  contracts:'2',
+  staff:'',
+  target:'',
+  actual:'',
+  forecast:'',
+  contracts:'0',
   ad:'0',
   v1:'0',
-  v2:'1',
+  v2:'0',
   v3:'0',
   v4:'0',
   ah1:'40',
-  ah2:'32',
+  ah2:'',
   su1:'10',
-  su2:'8',
-  hp:'35',
-  r1:'8',
-  r2:'0',
-  r3:'3',
-  r4:'0'
+  su2:'',
+  hp:'',
+  r1:'',
+  r2:'',
+  r3:'',
+  r4:''
 };
 const persistedFieldIds=[
   'staff','target','actual','forecast','contracts','ad',
@@ -235,16 +272,12 @@ const persistedFieldIds=[
   'ah1','ah2','su1','su2','hp',
   'r1','r2','r3','r4'
 ];
-const initProps=[
-  ['La Stage West 中野 401','通常',8,1],
-  ['ファランドール 103','通常',5,1],
-  ['BARN OWL 102','通常',4,1],
-  ['ヒルズガレージ 105','賃料査定中',0,0],
-  ['ヴィラーヌ高崎','通常',8,0],
-  ['カーサロッソ 202','ネット掲載準備中',0,0],
-  ['エンドレス大成Ⅰ 103','賃料査定中',0,0],
-  ['カーサピッコラ 402','通常',1,0]
-];
+const compactStepperGroups={
+  visitor:{stepSelectId:'visitorStepSize',fieldIds:['v1','v2','v3','v4']},
+  register:{stepSelectId:'registerStepSize',fieldIds:['ah2','su2']},
+  vacancy:{stepSelectId:'vacancyStepSize',fieldIds:['r1','r2','r3','r4']}
+};
+const initProps=[];
 
 function getEl(id){return document.getElementById(id);}
 function getVal(id,usePlaceholder){
@@ -296,6 +329,60 @@ function gv(id){
 }
 function yen(n){return parseInt(n||0,10).toLocaleString('ja-JP')+'円';}
 
+function applyDeltaToField(inputId,delta){
+  const input=getEl(inputId);
+  if(!input)return;
+  const current=parseInt(normalizeNumericText(input.value),10)||0;
+  const next=Math.max(0,current+delta);
+  input.value=String(next);
+  sanitizeNumericInputField(input);
+  triggerIOSHaptic();
+}
+
+function getStepSize(groupName){
+  const group=compactStepperGroups[groupName];
+  const select=group?getEl(group.stepSelectId):null;
+  const value=select?select.value:'1';
+  return ['1','5','10'].includes(value)?parseInt(value,10):1;
+}
+
+function createCompactStepper(input,groupName){
+  const wrap=document.createElement('div');
+  wrap.className='compact-stepper';
+
+  const minus=document.createElement('button');
+  minus.type='button';
+  minus.className='compact-stepper-btn minus';
+  minus.textContent='−';
+  minus.setAttribute('aria-label','減らす');
+  minus.addEventListener('click',()=>applyDeltaToField(input.id,-getStepSize(groupName)));
+
+  const plus=document.createElement('button');
+  plus.type='button';
+  plus.className='compact-stepper-btn plus';
+  plus.textContent='+';
+  plus.setAttribute('aria-label','増やす');
+  plus.addEventListener('click',()=>applyDeltaToField(input.id,getStepSize(groupName)));
+
+  wrap.appendChild(minus);
+  wrap.appendChild(input);
+  wrap.appendChild(plus);
+  return wrap;
+}
+
+function setupCompactSteppers(){
+  Object.keys(compactStepperGroups).forEach(groupName=>{
+    compactStepperGroups[groupName].fieldIds.forEach(id=>{
+      const input=getEl(id);
+      if(!input)return;
+      const field=input.closest('.field');
+      if(!field||field.querySelector('.compact-stepper'))return;
+      field.classList.add('compact-field');
+      field.appendChild(createCompactStepper(input,groupName));
+    });
+  });
+}
+
 function formatDateWithDow(d){
   const days=['日','月','火','水','木','金','土'];
   return `${d.getMonth()+1}/${d.getDate()}（${days[d.getDay()]}）`;
@@ -303,6 +390,13 @@ function formatDateWithDow(d){
 function formatFullDateWithDow(d){
   const days=['日','月','火','水','木','金','土'];
   return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}（${days[d.getDay()]}）`;
+}
+function pad2(n){return String(n).padStart(2,'0');}
+function getDateKey(date){
+  return `${date.getFullYear()}-${pad2(date.getMonth()+1)}-${pad2(date.getDate())}`;
+}
+function getMonthKey(date){
+  return `${date.getFullYear()}-${pad2(date.getMonth()+1)}`;
 }
 function syncToday(){
   const el=getEl('reportDate');
@@ -517,22 +611,52 @@ function addProp(name='',status='通常',h=0,s=0,focusAfterAdd=false){
   const safeS=normalizeNumericText(s);
   const initialH=safeH===''?'0':safeH;
   const initialS=safeS===''?'0':safeS;
+  const activeStatus=statusLabels.includes(status)?status:'通常';
   const div=document.createElement('div');
   div.className='prop-block';
   div.id='pb'+id;
-  const tagsHtml=statusLabels.map(label=>`<span class="tag${label===status?' on':''}" onclick="toggleTag(this,${id})">${label}</span>`).join('');
-  div.innerHTML=`
-<div class="del-row"><button class="del-btn" onclick="removeProp(${id})">削除</button></div>
-<input class="prop-name" id="pn${id}" type="text" placeholder="物件名・部屋番号" value="${name}" inputmode="text">
-<div class="tags" id="sr${id}">${tagsHtml}</div>
-<div class="nums-row">
-  <div class="num-field"><label>🈳 反響</label><input type="number" id="ph${id}" value="${initialH}" inputmode="numeric"></div>
-  <div class="num-field"><label>🈸 反響</label><input type="number" id="ps${id}" value="${initialS}" inputmode="numeric"></div>
-</div>`;
+
+  const delRow=document.createElement('div');
+  delRow.className='del-row';
+  const delBtn=document.createElement('button');
+  delBtn.type='button';
+  delBtn.className='del-btn';
+  delBtn.textContent='削除';
+  delBtn.addEventListener('click',()=>removeProp(id));
+  delRow.appendChild(delBtn);
+
+  const nameInput=document.createElement('input');
+  nameInput.className='prop-name';
+  nameInput.id='pn'+id;
+  nameInput.type='text';
+  nameInput.placeholder='物件名・部屋番号';
+  nameInput.value=name||'';
+  nameInput.inputMode='text';
+
+  const tagsWrap=document.createElement('div');
+  tagsWrap.className='tags';
+  tagsWrap.id='sr'+id;
+  statusLabels.forEach(label=>{
+    const tag=document.createElement('span');
+    tag.className='tag'+(label===activeStatus?' on':'');
+    tag.textContent=label;
+    tag.addEventListener('click',()=>toggleTag(tag,id));
+    tagsWrap.appendChild(tag);
+  });
+
+  const numsRow=document.createElement('div');
+  numsRow.className='nums-row';
+  numsRow.appendChild(createStepperField('🈳 反響','ph'+id,initialH));
+  numsRow.appendChild(createStepperField('🈸 申し込み','ps'+id,initialS));
+
+  div.appendChild(delRow);
+  div.appendChild(nameInput);
+  div.appendChild(tagsWrap);
+  div.appendChild(numsRow);
   getEl('propList').appendChild(div);
   normalizeIOSNumericInputs(div);
+  updatePropCount();
   if(focusAfterAdd){
-    const nameInput=getEl('pn'+id);
     div.scrollIntoView({behavior:'smooth',block:'center'});
     setTimeout(()=>{
       if(!nameInput)return;
@@ -542,8 +666,61 @@ function addProp(name='',status='通常',h=0,s=0,focusAfterAdd=false){
   }
 }
 
+function updatePropCount(){
+  const countEl=getEl('vacancyPropCount');
+  const list=getEl('propList');
+  if(!countEl||!list)return;
+  const count=list.querySelectorAll('.prop-block').length;
+  countEl.textContent=`（追加物件 ${count}件）`;
+}
+
+function createStepperField(labelText,inputId,value){
+  const field=document.createElement('div');
+  field.className='num-field';
+
+  const label=document.createElement('label');
+  label.textContent=labelText;
+
+  const stepper=document.createElement('div');
+  stepper.className='stepper';
+
+  const minus=document.createElement('button');
+  minus.type='button';
+  minus.className='stepper-btn';
+  minus.textContent='-';
+  minus.addEventListener('click',()=>stepPropCount(inputId,-1));
+
+  const input=document.createElement('input');
+  input.type='text';
+  input.id=inputId;
+  input.value=value;
+  input.readOnly=true;
+
+  const plus=document.createElement('button');
+  plus.type='button';
+  plus.className='stepper-btn';
+  plus.textContent='+';
+  plus.addEventListener('click',()=>stepPropCount(inputId,1));
+
+  stepper.appendChild(minus);
+  stepper.appendChild(input);
+  stepper.appendChild(plus);
+  field.appendChild(label);
+  field.appendChild(stepper);
+  return field;
+}
+
 function addPropAndFocus(){
   addProp('', '通常', 0, 0, true);
+}
+
+function stepPropCount(id,delta){
+  const input=getEl(id);
+  if(!input)return;
+  const current=parseInt(gv(id),10)||0;
+  const next=Math.max(0,current+delta);
+  input.value=String(next);
+  triggerIOSHaptic();
 }
 
 function removeProp(id){
@@ -559,6 +736,7 @@ function removeProp(id){
     if(done)return;
     done=true;
     target.remove();
+    updatePropCount();
   };
   target.addEventListener('transitionend',e=>{
     if(e.propertyName==='max-height')finalize();
@@ -579,17 +757,48 @@ function getStatus(id){
   return on?on.textContent:'通常';
 }
 
+function isValidTargetValue(value){
+  return ['10','20','30','40','50'].includes(String(value));
+}
+
 function loadLastSnapshot(){
   try{
-    const raw=localStorage.getItem(storageKey);
+    const raw=localStorage.getItem(snapshotStorageKey);
     if(!raw)return null;
     const data=JSON.parse(raw);
     if(!data||typeof data!=='object')return null;
-    if(data.seedVersion!==seedVersion)return null;
     return data;
   }catch(_e){
     return null;
   }
+}
+
+function loadSettings(){
+  try{
+    const raw=localStorage.getItem(settingsStorageKey);
+    if(!raw)return null;
+    const data=JSON.parse(raw);
+    return data&&typeof data==='object'?data:null;
+  }catch(_e){
+    return null;
+  }
+}
+
+function loadMeta(){
+  try{
+    const raw=localStorage.getItem(metaStorageKey);
+    if(!raw)return null;
+    const data=JSON.parse(raw);
+    return data&&typeof data==='object'?data:null;
+  }catch(_e){
+    return null;
+  }
+}
+
+function saveMeta(meta){
+  try{
+    localStorage.setItem(metaStorageKey,JSON.stringify(meta));
+  }catch(_e){}
 }
 
 function applyInitialFieldValues(snapshot){
@@ -604,8 +813,48 @@ function applyInitialFieldValues(snapshot){
       const normalized=normalizeNumericText(initial);
       initial=normalized===''?'0':normalized;
     }
+    if((id==='ah1'||id==='su1'||id==='hp')&&!isValidTargetValue(initial)){
+      initial=fieldDefaults[id];
+    }
     el.value=initial;
   });
+}
+
+function applySettingsValues(settings){
+  if(!settings)return;
+  const staff=getEl('staff');
+  const ah1=getEl('ah1');
+  const su1=getEl('su1');
+  const hp=getEl('hp');
+  if(staff&&typeof settings.staff==='string')staff.value=settings.staff;
+  if(ah1&&isValidTargetValue(settings.ah1))ah1.value=String(settings.ah1);
+  if(su1&&isValidTargetValue(settings.su1))su1.value=String(settings.su1);
+  if(hp&&isValidTargetValue(settings.hp))hp.value=String(settings.hp);
+}
+
+function applyPropsSnapshot(props){
+  const list=getEl('propList');
+  if(!list)return;
+  list.replaceChildren();
+  if(!Array.isArray(props)){
+    updatePropCount();
+    return;
+  }
+  props.forEach(p=>{
+    const name=typeof p.name==='string'?p.name:'';
+    const status=statusLabels.includes(p.status)?p.status:'通常';
+    const hRaw=String(p&&p.h!==undefined&&p.h!==null?p.h:'0');
+    const sRaw=String(p&&p.s!==undefined&&p.s!==null?p.s:'0');
+    const h=normalizeNumericText(hRaw);
+    const s=normalizeNumericText(sRaw);
+    addProp(name,status,h===''?'0':h,s===''?'0':s);
+  });
+  updatePropCount();
+}
+
+function applySnapshotToScreen(snapshot){
+  applyInitialFieldValues(snapshot);
+  applyPropsSnapshot(snapshot&&Array.isArray(snapshot.props)?snapshot.props:[]);
 }
 
 function getPropsSnapshot(){
@@ -632,21 +881,95 @@ function saveLastSnapshot(){
       }
       fields[id]=gv(id);
     });
-    const data={seedVersion,fields,props:getPropsSnapshot()};
-    localStorage.setItem(storageKey,JSON.stringify(data));
+    const data={fields,props:getPropsSnapshot()};
+    localStorage.setItem(snapshotStorageKey,JSON.stringify(data));
   }catch(_e){}
+}
+
+function updateMetaForToday(){
+  const now=new Date();
+  saveMeta({
+    lastUsedDate:getDateKey(now),
+    lastUsedMonth:getMonthKey(now)
+  });
+}
+
+function resetDailyVisitorFields(){
+  ['v1','v2','v3','v4'].forEach(id=>{
+    const el=getEl(id);
+    if(el)el.value='0';
+  });
+}
+
+function resetMonthlySalesFields(){
+  ['target','actual','forecast','contracts','ad'].forEach(id=>{
+    const el=getEl(id);
+    if(el)el.value='0';
+  });
+}
+
+function runStartupDateMonthChecks(){
+  const now=new Date();
+  const todayKey=getDateKey(now);
+  const monthKey=getMonthKey(now);
+  const meta=loadMeta()||{};
+  let changed=false;
+
+  if(meta.lastUsedDate&&meta.lastUsedDate!==todayKey){
+    resetDailyVisitorFields();
+    showToast('日付が変わったため来店客数をリセットしました');
+    changed=true;
+  }
+
+  if(meta.lastUsedMonth&&meta.lastUsedMonth!==monthKey){
+    const shouldReset=confirm('月が変わりました。売上目標・当月実績・当月見込み・契約件数・内AD件数をリセットしますか？');
+    if(shouldReset){
+      resetMonthlySalesFields();
+      showToast('月初項目をリセットしました');
+      changed=true;
+    }
+  }
+
+  saveMeta({
+    lastUsedDate:todayKey,
+    lastUsedMonth:monthKey
+  });
+
+  if(changed)saveLastSnapshot();
 }
 
 function showReport(){
   getEl('editorScreen').classList.remove('active');
+  getEl('settingsScreen').classList.remove('active');
   getEl('reportScreen').classList.add('active');
   window.scrollTo(0,0);
 }
 
 function goBackToEditor(){
   getEl('reportScreen').classList.remove('active');
+  getEl('settingsScreen').classList.remove('active');
   getEl('editorScreen').classList.add('active');
   window.scrollTo(0,0);
+}
+
+function showSettingsScreen(){
+  syncSettingsFormFromEditor();
+  getEl('editorScreen').classList.remove('active');
+  getEl('reportScreen').classList.remove('active');
+  getEl('settingsScreen').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+let toastTimer=0;
+function showToast(message){
+  const toast=getEl('toast');
+  if(!toast)return;
+  toast.textContent=message;
+  toast.classList.add('show');
+  if(toastTimer)clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{
+    toast.classList.remove('show');
+  },2000);
 }
 
 function setGenerateLoading(isLoading){
@@ -731,6 +1054,7 @@ function generate(){
   btn.textContent='コピーする';
   btn.className='copy-btn';
   saveLastSnapshot();
+  updateMetaForToday();
   showReport();
 }
 
@@ -765,26 +1089,110 @@ function showOk(btn){
   },2500);
 }
 
+function syncSettingsFormFromEditor(){
+  const settings=loadSettings()||{};
+  const staff=getEl('settingsStaff');
+  const ah1=getEl('settingsAh1');
+  const su1=getEl('settingsSu1');
+  const hp=getEl('settingsHp');
+  if(staff)staff.value=getVal('staff',false)||settings.staff||'';
+  if(ah1){
+    const value=getVal('ah1',false)||settings.ah1||fieldDefaults.ah1;
+    ah1.value=isValidTargetValue(value)?String(value):fieldDefaults.ah1;
+  }
+  if(su1){
+    const value=getVal('su1',false)||settings.su1||fieldDefaults.su1;
+    su1.value=isValidTargetValue(value)?String(value):fieldDefaults.su1;
+  }
+  if(hp){
+    const value=getVal('hp',false)||settings.hp||fieldDefaults.hp;
+    hp.value=isValidTargetValue(value)?String(value):fieldDefaults.hp;
+  }
+}
+
+function saveSettings(){
+  const staff=getVal('settingsStaff',false);
+  const ah1Value=getVal('settingsAh1',false);
+  const su1Value=getVal('settingsSu1',false);
+  const hpValue=getVal('settingsHp',false);
+  const settings={
+    staff,
+    ah1:isValidTargetValue(ah1Value)?ah1Value:fieldDefaults.ah1,
+    su1:isValidTargetValue(su1Value)?su1Value:fieldDefaults.su1,
+    hp:isValidTargetValue(hpValue)?hpValue:fieldDefaults.hp
+  };
+  try{
+    localStorage.setItem(settingsStorageKey,JSON.stringify(settings));
+  }catch(_e){}
+  applySettingsValues(settings);
+  updateSnapshotSettingsFields(settings);
+  showToast('設定を保存しました');
+}
+
+function updateSnapshotSettingsFields(settings){
+  const snapshot=loadLastSnapshot();
+  if(!snapshot)return;
+  if(!snapshot.fields||typeof snapshot.fields!=='object')snapshot.fields={};
+  snapshot.fields.staff=settings.staff;
+  snapshot.fields.ah1=settings.ah1;
+  snapshot.fields.su1=settings.su1;
+  snapshot.fields.hp=settings.hp;
+  if(!Array.isArray(snapshot.props))snapshot.props=[];
+  try{
+    localStorage.setItem(snapshotStorageKey,JSON.stringify(snapshot));
+  }catch(_e){}
+}
+
+function restorePreviousSnapshot(){
+  const snapshot=loadLastSnapshot();
+  if(!snapshot){
+    showToast('前回値がありません');
+    return;
+  }
+  applySnapshotToScreen(snapshot);
+  syncToday();
+  showToast('前回値を復元しました');
+}
+
+function setupStaticButtonHandlers(){
+  const addBtn=getEl('addPropBtn');
+  const generateBtn=getEl('generateBtn');
+  const backBtn=getEl('backBtn');
+  const copyBtn=getEl('copyBtn');
+  const openSettingsBtn=getEl('openSettingsBtn');
+  const restoreSnapshotBtn=getEl('restoreSnapshotBtn');
+  const saveSettingsBtn=getEl('saveSettingsBtn');
+  const settingsBackBtn=getEl('settingsBackBtn');
+  if(addBtn)addBtn.addEventListener('click',addPropAndFocus);
+  if(generateBtn)generateBtn.addEventListener('click',handleGenerate);
+  if(backBtn)backBtn.addEventListener('click',goBackToEditor);
+  if(copyBtn)copyBtn.addEventListener('click',copyOut);
+  if(openSettingsBtn)openSettingsBtn.addEventListener('click',showSettingsScreen);
+  if(restoreSnapshotBtn)restoreSnapshotBtn.addEventListener('click',restorePreviousSnapshot);
+  if(saveSettingsBtn)saveSettingsBtn.addEventListener('click',saveSettings);
+  if(settingsBackBtn)settingsBackBtn.addEventListener('click',goBackToEditor);
+}
+
 const lastSnapshot=loadLastSnapshot();
-applyInitialFieldValues(lastSnapshot);
+const savedSettings=loadSettings();
+if(lastSnapshot){
+  applySnapshotToScreen(lastSnapshot);
+}else{
+  applyInitialFieldValues(null);
+  if(savedSettings)applySettingsValues(savedSettings);
+  initProps.forEach(p=>addProp(p[0],p[1],p[2],p[3]));
+}
 setupIOSNumericCaretFix();
 setupFocusSelectForEditableInputs();
 setupNumericInputSanitizer();
+setupCompactSteppers();
 setupIOSButtonHaptics();
-if(lastSnapshot&&Array.isArray(lastSnapshot.props)&&lastSnapshot.props.length){
-  lastSnapshot.props.forEach(p=>{
-    const name=typeof p.name==='string'?p.name:'';
-    const status=statusLabels.includes(p.status)?p.status:'通常';
-    const hRaw=String(p&&p.h!==undefined&&p.h!==null?p.h:'0');
-    const sRaw=String(p&&p.s!==undefined&&p.s!==null?p.s:'0');
-    const h=normalizeNumericText(hRaw);
-    const s=normalizeNumericText(sRaw);
-    addProp(name,status,h===''?'0':h,s===''?'0':s);
-  });
-}else{
-  initProps.forEach(p=>addProp(p[0],p[1],p[2],p[3]));
-}
+setupStaticButtonHandlers();
+runStartupDateMonthChecks();
 syncToday();
+updatePropCount();
 </script>
 </body>
 </html>
+
+
