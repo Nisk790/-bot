@@ -3,16 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#171615">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>日報作成ツール</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-:root{--safe-bottom:env(safe-area-inset-bottom);--action-h:116px;--bg:#171615;--bg-soft:#1d1b19;--card:#24211f;--card-2:#2b2825;--input:#302c28;--input-strong:#38332e;--text:#f3eee7;--text-soft:#d7cec4;--text-muted:#9a9086;--text-dim:#756d65;--border:rgba(255,255,255,.08);--border-strong:rgba(255,255,255,.14);--accent:#d88a3d;--accent-strong:#f0a24a;--accent-soft:rgba(216,138,61,.16);--danger:#ff6b5f;--success:#54c878;--shadow:rgba(0,0,0,.28)}
-body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;background:radial-gradient(circle at 20% -10%,rgba(216,138,61,.1),transparent 28%),linear-gradient(180deg,var(--bg-soft),var(--bg));color:var(--text);font-size:16px;padding-bottom:calc(var(--action-h) + var(--safe-bottom))}
+:root{--safe-top:env(safe-area-inset-top);--safe-bottom:env(safe-area-inset-bottom);--action-h:116px;--bg:#171615;--bg-soft:#1d1b19;--card:#24211f;--card-2:#2b2825;--input:#302c28;--input-strong:#38332e;--text:#f3eee7;--text-soft:#d7cec4;--text-muted:#9a9086;--text-dim:#756d65;--border:rgba(255,255,255,.08);--border-strong:rgba(255,255,255,.14);--accent:#d88a3d;--accent-strong:#f0a24a;--accent-soft:rgba(216,138,61,.16);--danger:#ff6b5f;--success:#54c878;--shadow:rgba(0,0,0,.28)}
+html{background:var(--bg);min-height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;background-color:var(--bg);background-image:radial-gradient(circle at 20% -10%,rgba(216,138,61,.1),transparent 28%),linear-gradient(180deg,var(--bg-soft),var(--bg));color:var(--text);font-size:16px;padding-bottom:calc(var(--action-h) + var(--safe-bottom))}
 
 .screen{display:none}
 .screen.active{display:block}
 
-h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:var(--text);letter-spacing:.01em}
+h1{font-size:22px;font-weight:700;padding:calc(18px + var(--safe-top)) 12px 10px;color:var(--text);letter-spacing:.01em}
 .quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 8px}
 .mini-btn{min-height:34px;border:1px solid var(--border-strong);border-radius:8px;background:var(--card);color:var(--accent-strong);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 12px rgba(0,0,0,.2)}
 .mini-btn:active{filter:brightness(1.08)}
@@ -55,6 +59,7 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:var(--text);lette
 .field.compact-field{grid-template-columns:minmax(0,1fr) auto;column-gap:6px;min-height:34px;padding-top:5px;padding-bottom:5px}
 .compact-stepper{display:grid;grid-template-columns:28px 44px 28px;gap:4px;align-items:center;justify-self:end;width:108px}
 .compact-stepper input[type=number],.compact-stepper input.ios-num{width:44px!important;max-width:44px!important;min-width:44px!important;height:28px;min-height:28px;text-align:center;padding:0 4px;line-height:26px}
+.compact-stepper input[readonly]{background:var(--input);color:var(--text);opacity:1;cursor:default}
 .compact-stepper-btn,.stepper-btn{background:var(--input-strong);border:1px solid var(--border-strong);color:var(--accent-strong);box-shadow:0 4px 10px rgba(0,0,0,.22)}
 .compact-stepper-btn{width:28px;height:28px;border-radius:8px;font-size:18px;font-weight:900;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .compact-stepper-btn.minus{color:var(--text-muted)}
@@ -86,6 +91,7 @@ h1{font-size:22px;font-weight:700;padding:18px 12px 10px;color:var(--text);lette
 .gen-btn:disabled{opacity:.9}
 .add-btn,.gen-btn,.copy-btn{box-shadow:0 6px 14px rgba(0,0,0,.18)}
 button{transition:transform .06s ease,filter .06s ease,box-shadow .08s ease;box-shadow:0 4px 10px rgba(0,0,0,.14)}
+button,.tag,.compact-stepper-btn,.stepper-btn{touch-action:manipulation;-webkit-user-select:none;user-select:none}
 button:active{transform:translateY(3px) scale(.94);filter:brightness(.86) saturate(1.08);box-shadow:inset 0 2px 8px rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.2)}
 button:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
 .spin-arrow{display:inline-block;font-size:18px;line-height:1;animation:spin .8s linear infinite}
@@ -116,6 +122,13 @@ button:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
 .ios .field input[type=number],.ios .field input[type=text],.ios .field select,.ios .prop-name,.ios .num-field input{font-size:16px !important}
 .ios .field.field-date #reportDate{font-size:13px !important}
 .ios .step-size-select{font-size:16px!important;width:48px}
+.ios .compact-stepper input.ios-num[readonly]{text-align:center !important}
+
+@media(max-width:430px){
+  .field.compact-field{grid-template-columns:1fr!important;row-gap:6px;align-items:start;min-height:auto;padding-top:7px;padding-bottom:8px}
+  .field.compact-field label{width:100%;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.3}
+  .field.compact-field .compact-stepper{justify-self:end}
+}
 
 @media(max-width:360px){
   .field{padding:5px 8px;grid-template-columns:minmax(0,1fr) auto}
@@ -339,6 +352,23 @@ function applyDeltaToField(inputId,delta){
   triggerIOSHaptic();
 }
 
+function bindFastTapButton(button,handler){
+  let lastTouchAt=0;
+  button.addEventListener('touchstart',e=>{
+    if(!isIOSDevice()&&!isStandalonePWA())return;
+    e.preventDefault();
+    lastTouchAt=Date.now();
+    handler();
+  },{passive:false});
+  button.addEventListener('click',e=>{
+    if(Date.now()-lastTouchAt<600){
+      e.preventDefault();
+      return;
+    }
+    handler();
+  });
+}
+
 function getStepSize(groupName){
   const group=compactStepperGroups[groupName];
   const select=group?getEl(group.stepSelectId):null;
@@ -355,14 +385,14 @@ function createCompactStepper(input,groupName){
   minus.className='compact-stepper-btn minus';
   minus.textContent='−';
   minus.setAttribute('aria-label','減らす');
-  minus.addEventListener('click',()=>applyDeltaToField(input.id,-getStepSize(groupName)));
+  bindFastTapButton(minus,()=>applyDeltaToField(input.id,-getStepSize(groupName)));
 
   const plus=document.createElement('button');
   plus.type='button';
   plus.className='compact-stepper-btn plus';
   plus.textContent='+';
   plus.setAttribute('aria-label','増やす');
-  plus.addEventListener('click',()=>applyDeltaToField(input.id,getStepSize(groupName)));
+  bindFastTapButton(plus,()=>applyDeltaToField(input.id,getStepSize(groupName)));
 
   wrap.appendChild(minus);
   wrap.appendChild(input);
@@ -379,6 +409,15 @@ function setupCompactSteppers(){
       if(!field||field.querySelector('.compact-stepper'))return;
       field.classList.add('compact-field');
       field.appendChild(createCompactStepper(input,groupName));
+    });
+  });
+}
+
+function setupReadonlyCompactInputs(){
+  Object.values(compactStepperGroups).forEach(group=>{
+    group.fieldIds.forEach(id=>{
+      const input=getEl(id);
+      if(input)input.readOnly=true;
     });
   });
 }
@@ -401,6 +440,13 @@ function getMonthKey(date){
 function syncToday(){
   const el=getEl('reportDate');
   if(el)el.value=formatFullDateWithDow(new Date());
+}
+
+function setupStandalonePWAViewportLock(){
+  if(!isIOSDevice()||!isStandalonePWA())return;
+  const viewport=document.querySelector('meta[name="viewport"]');
+  if(!viewport)return;
+  viewport.setAttribute('content','width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
 }
 
 function isEditableControl(el){
@@ -688,7 +734,7 @@ function createStepperField(labelText,inputId,value){
   minus.type='button';
   minus.className='stepper-btn';
   minus.textContent='-';
-  minus.addEventListener('click',()=>stepPropCount(inputId,-1));
+  bindFastTapButton(minus,()=>stepPropCount(inputId,-1));
 
   const input=document.createElement('input');
   input.type='text';
@@ -700,7 +746,7 @@ function createStepperField(labelText,inputId,value){
   plus.type='button';
   plus.className='stepper-btn';
   plus.textContent='+';
-  plus.addEventListener('click',()=>stepPropCount(inputId,1));
+  bindFastTapButton(plus,()=>stepPropCount(inputId,1));
 
   stepper.appendChild(minus);
   stepper.appendChild(input);
@@ -1182,6 +1228,8 @@ if(lastSnapshot){
   if(savedSettings)applySettingsValues(savedSettings);
   initProps.forEach(p=>addProp(p[0],p[1],p[2],p[3]));
 }
+setupStandalonePWAViewportLock();
+setupReadonlyCompactInputs();
 setupIOSNumericCaretFix();
 setupFocusSelectForEditableInputs();
 setupNumericInputSanitizer();
