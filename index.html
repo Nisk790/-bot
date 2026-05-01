@@ -18,6 +18,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;bac
 
 h1{font-size:22px;font-weight:700;padding:calc(18px + var(--safe-top)) 12px 10px;color:var(--text);letter-spacing:.01em}
 .quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 8px}
+.quick-actions .wide-action{grid-column:1/-1}
 .mini-btn{min-height:34px;border:1px solid var(--border-strong);border-radius:8px;background:var(--card);color:var(--accent-strong);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 5px 12px rgba(0,0,0,.2)}
 .mini-btn:active{filter:brightness(1.08)}
 .top-pane{min-height:calc(100svh - var(--action-h) - var(--safe-bottom));display:flex;flex-direction:column;overflow:hidden}
@@ -32,6 +33,7 @@ h1{font-size:22px;font-weight:700;padding:calc(18px + var(--safe-top)) 12px 10px
 .step-size-select{width:44px;min-height:22px;border:1px solid var(--border-strong);border-radius:7px;background:var(--input);color:var(--accent-strong);font-size:12px;font-weight:800;text-align:center;text-align-last:center;padding:1px 4px;outline:none}
 
 .field{padding:6px 10px;border-bottom:.5px solid var(--border);display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:8px;min-height:30px}
+.field.field-full{display:block}
 .field:last-child{border-bottom:none}
 .field label{font-size:13px;color:var(--text-soft);min-width:0;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25;word-break:normal;overflow-wrap:anywhere}
 .field input[type=number],.field input[type=text],.field select{text-align:right;border:1px solid var(--border-strong);outline:none;font-size:14px;color:var(--text);background:var(--input);width:118px;max-width:55%;padding:4px 8px;min-height:28px;flex:0 0 auto;border-radius:8px;justify-self:end;font-variant-numeric:tabular-nums;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
@@ -60,10 +62,15 @@ h1{font-size:22px;font-weight:700;padding:calc(18px + var(--safe-top)) 12px 10px
 .compact-stepper{display:grid;grid-template-columns:28px 44px 28px;gap:4px;align-items:center;justify-self:end;width:108px}
 .compact-stepper input[type=number],.compact-stepper input.ios-num{width:44px!important;max-width:44px!important;min-width:44px!important;height:28px;min-height:28px;text-align:center;padding:0 4px;line-height:26px}
 .compact-stepper input[readonly]{background:var(--input);color:var(--text);opacity:1;cursor:default}
-.compact-stepper-btn,.stepper-btn{background:var(--input-strong);border:1px solid var(--border-strong);color:var(--accent-strong);box-shadow:0 4px 10px rgba(0,0,0,.22)}
-.compact-stepper-btn{width:28px;height:28px;border-radius:8px;font-size:18px;font-weight:900;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.field.sales-count-stepper-field{grid-template-columns:minmax(0,1fr) auto;column-gap:6px}
+.fixed-one-stepper{display:grid;grid-template-columns:28px 44px 28px;gap:4px;align-items:center;justify-self:end;width:108px}
+.fixed-one-stepper input[type=number],.fixed-one-stepper input.ios-num{width:44px!important;max-width:44px!important;min-width:44px!important;height:28px;min-height:28px;text-align:center;padding:0 4px;line-height:26px}
+.compact-stepper-btn,.fixed-one-stepper-btn,.stepper-btn{background:var(--input-strong);border:1px solid var(--border-strong);color:var(--accent-strong);box-shadow:0 4px 10px rgba(0,0,0,.22)}
+.compact-stepper-btn,.fixed-one-stepper-btn{width:28px;height:28px;border-radius:8px;font-size:18px;font-weight:900;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .compact-stepper-btn.minus{color:var(--text-muted)}
 .compact-stepper-btn.plus{background:linear-gradient(180deg,rgba(216,138,61,.22),rgba(216,138,61,.12));border-color:rgba(216,138,61,.34);color:var(--accent-strong)}
+.fixed-one-stepper-btn.minus{color:var(--text-muted)}
+.fixed-one-stepper-btn.plus{background:linear-gradient(180deg,rgba(216,138,61,.22),rgba(216,138,61,.12));border-color:rgba(216,138,61,.34);color:var(--accent-strong)}
 
 .section{background:linear-gradient(180deg,var(--card),#211e1c);border:1px solid var(--border);border-radius:16px;margin:0 12px 10px;overflow:hidden;box-shadow:0 10px 24px var(--shadow)}
 .prop-block{padding:10px 12px;border-bottom:.5px solid var(--border);max-height:420px;overflow:hidden;transform-origin:top center;transition:max-height .34s cubic-bezier(.22,.61,.36,1),padding .28s ease,margin .28s ease,opacity .24s ease,transform .24s ease,border-color .2s ease}
@@ -91,16 +98,17 @@ h1{font-size:22px;font-weight:700;padding:calc(18px + var(--safe-top)) 12px 10px
 .gen-btn:disabled{opacity:.9}
 .add-btn,.gen-btn,.copy-btn{box-shadow:0 6px 14px rgba(0,0,0,.18)}
 button{transition:transform .06s ease,filter .06s ease,box-shadow .08s ease;box-shadow:0 4px 10px rgba(0,0,0,.14)}
-button,.tag,.compact-stepper-btn,.stepper-btn{touch-action:manipulation;-webkit-user-select:none;user-select:none}
+button,.tag,.compact-stepper-btn,.fixed-one-stepper-btn,.stepper-btn{touch-action:manipulation;-webkit-user-select:none;user-select:none}
 button:active{transform:translateY(3px) scale(.94);filter:brightness(.86) saturate(1.08);box-shadow:inset 0 2px 8px rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.2)}
 button:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
 .spin-arrow{display:inline-block;font-size:18px;line-height:1;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-.report-head{display:flex;align-items:center;gap:8px;padding:10px 12px 4px}
-.back-btn{display:inline-flex;align-items:center;gap:6px;border:none;background:none;color:var(--accent-strong);font-size:17px;font-weight:600;cursor:pointer;padding:4px 0}
+.report-head{display:flex;align-items:center;gap:8px;padding:calc(10px + var(--safe-top)) 12px 8px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;min-height:36px;border:none;background:none;color:var(--accent-strong);font-size:17px;font-weight:600;cursor:pointer;padding:6px 0}
 .back-btn .arrow{font-size:20px;line-height:1}
 .report-title{font-size:18px;font-weight:700;color:var(--text);letter-spacing:.01em}
+.import-title{padding:4px 12px 10px}
 .out-wrap{margin:8px 12px 20px}
 .out-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 14px;white-space:pre-wrap;font-size:14px;line-height:1.45;color:var(--text);word-break:normal;overflow-wrap:anywhere;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',monospace;box-shadow:0 10px 24px var(--shadow)}
 .copy-btn{margin-top:10px;padding:13px;font-size:16px;min-height:48px;font-weight:600;background:linear-gradient(180deg,var(--card),#211e1c);color:var(--accent-strong);border:1px solid var(--border-strong);box-shadow:0 10px 24px var(--shadow)}
@@ -110,6 +118,15 @@ button:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
 .save-settings-btn{border:none;background:linear-gradient(180deg,var(--accent-strong),var(--accent));color:#24160b}
 .settings-back-btn{border:1px solid var(--border-strong);background:var(--card);color:var(--accent-strong)}
 .settings-back-btn:active{filter:brightness(1.08)}
+.import-textarea{width:100%;min-height:220px;resize:vertical;border:1px solid var(--border-strong);border-radius:12px;background:var(--input);color:var(--text);font-size:16px;line-height:1.55;padding:12px;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.import-textarea:focus{border-color:var(--accent-strong);box-shadow:0 0 0 2px var(--accent-soft),inset 0 1px 0 rgba(255,255,255,.04)}
+.import-preview{margin-top:10px;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--card-2)}
+.import-preview-row{display:grid;grid-template-columns:minmax(0,42%) minmax(0,58%);border-bottom:1px solid var(--border)}
+.import-preview-row:last-child{border-bottom:none}
+.import-preview-label,.import-preview-value{padding:8px 10px;font-size:13px;line-height:1.35;overflow-wrap:anywhere}
+.import-preview-label{color:var(--text-muted);background:rgba(255,255,255,.02)}
+.import-preview-value{color:var(--text)}
+.import-preview-heading{grid-column:1/-1;padding:8px 10px;color:var(--accent-strong);font-size:12px;font-weight:800;background:rgba(216,138,61,.08);border-bottom:1px solid var(--border)}
 .toast{position:fixed;left:50%;bottom:calc(18px + var(--safe-bottom));transform:translateX(-50%) translateY(12px);max-width:calc(100% - 32px);padding:9px 14px;border-radius:999px;background:rgba(20,18,17,.96);color:var(--text);border:1px solid rgba(216,138,61,.25);font-size:13px;font-weight:700;z-index:10000;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease;white-space:nowrap;box-shadow:0 10px 28px rgba(0,0,0,.35)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -144,6 +161,7 @@ button:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
     <div class="quick-actions">
       <button type="button" class="mini-btn" id="openSettingsBtn">設定</button>
       <button type="button" class="mini-btn" id="restoreSnapshotBtn">前回値を使用</button>
+      <button type="button" class="mini-btn wide-action" id="openImportBtn">インポート</button>
     </div>
     <div class="top-grid">
       <div class="top-card wide">
@@ -182,6 +200,7 @@ button:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
         <input type="hidden" id="su1" value="10">
         <div class="field"><label>SUUMO 実績</label><input type="number" id="su2" placeholder="0" inputmode="numeric"></div>
         <input type="hidden" id="hp" value="">
+        <div class="field"><label>ホームページ 実績</label><input type="number" id="hp2" placeholder="0" inputmode="numeric"></div>
       </div>
 
       <div class="top-card vacancy">
@@ -232,6 +251,27 @@ button:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px}
   </div>
 </div>
 
+<div id="importScreen" class="screen">
+  <div class="report-head">
+    <button type="button" class="back-btn" id="importBackBtn"><span class="arrow">←</span>戻る</button>
+  </div>
+  <h1 class="import-title">日報インポート</h1>
+  <div class="section">
+    <div class="sec-title">貼り付け内容</div>
+    <div class="field field-full">
+      <textarea id="importText" class="import-textarea" placeholder="日報テキストを貼り付け"></textarea>
+    </div>
+  </div>
+  <div class="settings-actions">
+    <button type="button" class="save-settings-btn" id="parseImportBtn">読み取り</button>
+    <button type="button" class="save-settings-btn" id="applyImportBtn">反映する</button>
+  </div>
+  <div class="section">
+    <div class="sec-title">読み取り結果</div>
+    <div id="importPreview" class="import-preview"></div>
+  </div>
+</div>
+
 <div id="reportScreen" class="screen">
   <div class="report-head">
     <button type="button" class="back-btn" id="backBtn"><span class="arrow">←</span>戻る</button>
@@ -274,6 +314,7 @@ const fieldDefaults={
   su1:'10',
   su2:'',
   hp:'',
+  hp2:'',
   r1:'',
   r2:'',
   r3:'',
@@ -282,14 +323,15 @@ const fieldDefaults={
 const persistedFieldIds=[
   'staff','target','actual','forecast','contracts','ad',
   'v1','v2','v3','v4',
-  'ah1','ah2','su1','su2','hp',
+  'ah1','ah2','su1','su2','hp','hp2',
   'r1','r2','r3','r4'
 ];
 const compactStepperGroups={
   visitor:{stepSelectId:'visitorStepSize',fieldIds:['v1','v2','v3','v4']},
-  register:{stepSelectId:'registerStepSize',fieldIds:['ah2','su2']},
+  register:{stepSelectId:'registerStepSize',fieldIds:['ah2','su2','hp2']},
   vacancy:{stepSelectId:'vacancyStepSize',fieldIds:['r1','r2','r3','r4']}
 };
+let lastParsedImport=null;
 const initProps=[];
 
 function getEl(id){return document.getElementById(id);}
@@ -410,6 +452,41 @@ function setupCompactSteppers(){
       field.classList.add('compact-field');
       field.appendChild(createCompactStepper(input,groupName));
     });
+  });
+}
+
+function createFixedOneStepper(input){
+  const wrap=document.createElement('div');
+  wrap.className='fixed-one-stepper';
+
+  const minus=document.createElement('button');
+  minus.type='button';
+  minus.className='fixed-one-stepper-btn minus';
+  minus.textContent='−';
+  minus.setAttribute('aria-label','1減らす');
+  bindFastTapButton(minus,()=>applyDeltaToField(input.id,-1));
+
+  const plus=document.createElement('button');
+  plus.type='button';
+  plus.className='fixed-one-stepper-btn plus';
+  plus.textContent='+';
+  plus.setAttribute('aria-label','1増やす');
+  bindFastTapButton(plus,()=>applyDeltaToField(input.id,1));
+
+  wrap.appendChild(minus);
+  wrap.appendChild(input);
+  wrap.appendChild(plus);
+  return wrap;
+}
+
+function setupSalesCountSteppers(){
+  ['contracts','ad'].forEach(id=>{
+    const input=getEl(id);
+    if(!input)return;
+    const field=input.closest('.field');
+    if(!field||field.querySelector('.fixed-one-stepper'))return;
+    field.classList.add('sales-count-stepper-field');
+    field.appendChild(createFixedOneStepper(input));
   });
 }
 
@@ -987,6 +1064,7 @@ function runStartupDateMonthChecks(){
 function showReport(){
   getEl('editorScreen').classList.remove('active');
   getEl('settingsScreen').classList.remove('active');
+  getEl('importScreen').classList.remove('active');
   getEl('reportScreen').classList.add('active');
   window.scrollTo(0,0);
 }
@@ -994,6 +1072,7 @@ function showReport(){
 function goBackToEditor(){
   getEl('reportScreen').classList.remove('active');
   getEl('settingsScreen').classList.remove('active');
+  getEl('importScreen').classList.remove('active');
   getEl('editorScreen').classList.add('active');
   window.scrollTo(0,0);
 }
@@ -1002,7 +1081,19 @@ function showSettingsScreen(){
   syncSettingsFormFromEditor();
   getEl('editorScreen').classList.remove('active');
   getEl('reportScreen').classList.remove('active');
+  getEl('importScreen').classList.remove('active');
   getEl('settingsScreen').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function showImportScreen(){
+  lastParsedImport=null;
+  const preview=getEl('importPreview');
+  if(preview)preview.replaceChildren();
+  getEl('editorScreen').classList.remove('active');
+  getEl('settingsScreen').classList.remove('active');
+  getEl('reportScreen').classList.remove('active');
+  getEl('importScreen').classList.add('active');
   window.scrollTo(0,0);
 }
 
@@ -1072,7 +1163,7 @@ function generate(){
   lines.push('◉物件登録件数');
   lines.push(`at home ${gv('ah1')}件     ${gv('ah2')}件`);
   lines.push(`SUUMO  ${gv('su1')}件     ${gv('su2')}件`);
-  lines.push(`ホームページ        ${gv('hp')}件`);
+  lines.push(`ホームページ ${gv('hp')}件     ${gv('hp2')}件`);
   lines.push('');
   lines.push('◉賃貸空室');
   lines.push(`管理物件　　　　${gv('r1')}件`);
@@ -1133,6 +1224,182 @@ function showOk(btn){
     btn.textContent='コピーする';
     btn.className='copy-btn';
   },2500);
+}
+
+function cleanImportedNumber(value){
+  const normalized=normalizeNumericText(value);
+  return normalized===''?'0':normalized;
+}
+
+function setImportField(fields,id,value){
+  if(value!==undefined&&value!==null)fields[id]=cleanImportedNumber(value);
+}
+
+function matchImportNumber(text,regex){
+  const match=text.match(regex);
+  return match?match[1]:null;
+}
+
+function parseImportedProps(text){
+  const marker='【空き物件状況】';
+  const start=text.indexOf(marker);
+  if(start<0)return null;
+  const section=text.slice(start+marker.length);
+  const lines=section.split(/\r?\n/);
+  const props=[];
+  for(let i=0;i<lines.length;i++){
+    const nameMatch=lines[i].match(/^\s*\d+\.(.+)$/);
+    if(!nameMatch)continue;
+    let name=nameMatch[1].trim();
+    let status='通常';
+    const statusMatch=name.match(/（(賃料査定中|ネット掲載準備中)）\s*$/);
+    if(statusMatch){
+      status=statusMatch[1];
+      name=name.replace(/（(賃料査定中|ネット掲載準備中)）\s*$/,'').trim();
+    }
+    let h='0';
+    let s='0';
+    for(let j=i+1;j<Math.min(lines.length,i+4);j++){
+      if(/^\s*\d+\./.test(lines[j]))break;
+      const reaction=lines[j].match(/反響\s*([\d,]+).*?(?:申込|申し込み|🈸)\s*([\d,]+)/);
+      if(reaction){
+        h=cleanImportedNumber(reaction[1]);
+        s=cleanImportedNumber(reaction[2]);
+        break;
+      }
+    }
+    props.push({name,status,h,s});
+  }
+  return props.length?props:null;
+}
+
+function parseDailyReportImport(text){
+  const fields={};
+  const staffMatch=text.match(/担当\s*([^\r\n]+)/);
+  if(staffMatch)fields.staff=staffMatch[1].trim();
+  setImportField(fields,'target',matchImportNumber(text,/売上目標\s*([\d,]+)円/));
+  setImportField(fields,'actual',matchImportNumber(text,/当月実績\s*([\d,]+)円/));
+  setImportField(fields,'forecast',matchImportNumber(text,/当月見込み\s*([\d,]+)円/));
+  setImportField(fields,'contracts',matchImportNumber(text,/契約件数\s*([\d,]+)件/));
+  setImportField(fields,'ad',matchImportNumber(text,/内AD[^\d]*([\d,]+)件/));
+  setImportField(fields,'v1',matchImportNumber(text,/予約\s*([\d,]+)件/));
+  setImportField(fields,'v2',matchImportNumber(text,/飛込\s*([\d,]+)件/));
+  setImportField(fields,'v3',matchImportNumber(text,/再来店\s*([\d,]+)件/));
+  setImportField(fields,'v4',matchImportNumber(text,/その他\s*([\d,]+)件/));
+  const atHome=text.match(/at home\s*([\d,]+)件\s*([\d,]+)件/);
+  if(atHome){
+    setImportField(fields,'ah1',atHome[1]);
+    setImportField(fields,'ah2',atHome[2]);
+  }
+  const suumo=text.match(/SUUMO\s*([\d,]+)件\s*([\d,]+)件/);
+  if(suumo){
+    setImportField(fields,'su1',suumo[1]);
+    setImportField(fields,'su2',suumo[2]);
+  }
+  const hpMatch=text.match(/ホームページ\s*([\d,]+)件(?:\s*([\d,]+)件)?/);
+  if(hpMatch){
+    setImportField(fields,'hp',hpMatch[1]);
+    if(hpMatch[2]!==undefined)setImportField(fields,'hp2',hpMatch[2]);
+  }
+  setImportField(fields,'r1',matchImportNumber(text,/管理物件\s*([\d,]+)件/));
+  setImportField(fields,'r2',matchImportNumber(text,/一般物件\s*([\d,]+)件/));
+  setImportField(fields,'r3',matchImportNumber(text,/内空き予定\s*([\d,]+)件/));
+  setImportField(fields,'r4',matchImportNumber(text,/内サブリース\s*([\d,]+)件/));
+  const props=parseImportedProps(text);
+  return {fields,props};
+}
+
+function addImportPreviewHeading(label){
+  const preview=getEl('importPreview');
+  const heading=document.createElement('div');
+  heading.className='import-preview-heading';
+  heading.textContent=label;
+  preview.appendChild(heading);
+}
+
+function addImportPreviewRow(label,value){
+  const preview=getEl('importPreview');
+  const row=document.createElement('div');
+  row.className='import-preview-row';
+  const labelCell=document.createElement('div');
+  labelCell.className='import-preview-label';
+  labelCell.textContent=label;
+  const valueCell=document.createElement('div');
+  valueCell.className='import-preview-value';
+  valueCell.textContent=value;
+  row.appendChild(labelCell);
+  row.appendChild(valueCell);
+  preview.appendChild(row);
+}
+
+function renderImportPreview(data){
+  const preview=getEl('importPreview');
+  preview.replaceChildren();
+  const labels={
+    staff:'担当者名',target:'売上目標',actual:'当月実績',forecast:'当月見込み',
+    contracts:'契約件数',ad:'内AD件数',v1:'予約',v2:'飛込',v3:'再来店',v4:'その他',
+    ah1:'at home目標',ah2:'at home実績',su1:'SUUMO目標',su2:'SUUMO実績',
+    hp:'ホームページ目標',hp2:'ホームページ実績',r1:'管理物件',r2:'一般物件',
+    r3:'内空き予定',r4:'内サブリース'
+  };
+  const fieldIds=Object.keys(labels).filter(id=>data.fields&&data.fields[id]!==undefined);
+  if(fieldIds.length){
+    addImportPreviewHeading('基本項目');
+    fieldIds.forEach(id=>addImportPreviewRow(labels[id],data.fields[id]));
+  }
+  if(Array.isArray(data.props)&&data.props.length){
+    addImportPreviewHeading('空き物件状況');
+    data.props.forEach((prop,index)=>{
+      const suffix=prop.status&&prop.status!=='通常'?`（${prop.status}）`:'';
+      addImportPreviewRow(`${index+1}. ${prop.name}${suffix}`,`反響 ${prop.h} / 申込 ${prop.s}`);
+    });
+  }
+}
+
+function handleParseImport(){
+  const textarea=getEl('importText');
+  const text=textarea?textarea.value:'';
+  if(!text.trim()){
+    showToast('貼り付け内容がありません');
+    return;
+  }
+  const data=parseDailyReportImport(text);
+  const hasFields=Object.keys(data.fields).length>0;
+  const hasProps=Array.isArray(data.props)&&data.props.length>0;
+  if(!hasFields&&!hasProps){
+    lastParsedImport=null;
+    getEl('importPreview').replaceChildren();
+    showToast('対応する日報形式を読み取れませんでした');
+    return;
+  }
+  lastParsedImport=data;
+  renderImportPreview(data);
+}
+
+function applyImportedData(){
+  const hasFields=lastParsedImport&&Object.keys(lastParsedImport.fields||{}).length>0;
+  const hasProps=lastParsedImport&&Array.isArray(lastParsedImport.props)&&lastParsedImport.props.length>0;
+  if(!hasFields&&!hasProps){
+    showToast('反映できる読み取り結果がありません');
+    return;
+  }
+  if(!confirm('現在の入力内容をインポート内容で上書きします。反映しますか？'))return;
+  Object.keys(lastParsedImport.fields||{}).forEach(id=>{
+    const input=getEl(id);
+    if(input)input.value=lastParsedImport.fields[id];
+  });
+  if(Array.isArray(lastParsedImport.props)){
+    const list=getEl('propList');
+    if(list){
+      list.replaceChildren();
+      lastParsedImport.props.forEach(prop=>addProp(prop.name,prop.status,prop.h,prop.s));
+      updatePropCount();
+    }
+  }
+  saveLastSnapshot();
+  updateMetaForToday();
+  goBackToEditor();
+  showToast('インポート内容を反映しました');
 }
 
 function syncSettingsFormFromEditor(){
@@ -1206,17 +1473,31 @@ function setupStaticButtonHandlers(){
   const backBtn=getEl('backBtn');
   const copyBtn=getEl('copyBtn');
   const openSettingsBtn=getEl('openSettingsBtn');
+  const openImportBtn=getEl('openImportBtn');
   const restoreSnapshotBtn=getEl('restoreSnapshotBtn');
   const saveSettingsBtn=getEl('saveSettingsBtn');
   const settingsBackBtn=getEl('settingsBackBtn');
+  const parseImportBtn=getEl('parseImportBtn');
+  const applyImportBtn=getEl('applyImportBtn');
+  const importBackBtn=getEl('importBackBtn');
+  const importText=getEl('importText');
   if(addBtn)addBtn.addEventListener('click',addPropAndFocus);
   if(generateBtn)generateBtn.addEventListener('click',handleGenerate);
   if(backBtn)backBtn.addEventListener('click',goBackToEditor);
   if(copyBtn)copyBtn.addEventListener('click',copyOut);
   if(openSettingsBtn)openSettingsBtn.addEventListener('click',showSettingsScreen);
+  if(openImportBtn)openImportBtn.addEventListener('click',showImportScreen);
   if(restoreSnapshotBtn)restoreSnapshotBtn.addEventListener('click',restorePreviousSnapshot);
   if(saveSettingsBtn)saveSettingsBtn.addEventListener('click',saveSettings);
   if(settingsBackBtn)settingsBackBtn.addEventListener('click',goBackToEditor);
+  if(parseImportBtn)parseImportBtn.addEventListener('click',handleParseImport);
+  if(applyImportBtn)applyImportBtn.addEventListener('click',applyImportedData);
+  if(importBackBtn)importBackBtn.addEventListener('click',goBackToEditor);
+  if(importText)importText.addEventListener('input',()=>{
+    lastParsedImport=null;
+    const preview=getEl('importPreview');
+    if(preview)preview.replaceChildren();
+  });
 }
 
 const lastSnapshot=loadLastSnapshot();
@@ -1234,6 +1515,7 @@ setupIOSNumericCaretFix();
 setupFocusSelectForEditableInputs();
 setupNumericInputSanitizer();
 setupCompactSteppers();
+setupSalesCountSteppers();
 setupIOSButtonHaptics();
 setupStaticButtonHandlers();
 runStartupDateMonthChecks();
